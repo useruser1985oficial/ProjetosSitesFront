@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Aprenda Docker</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+    </head>
+    <body>
+        <div>
+            <header>
+                <h1>Aprenda Docker</h1>
+                <menu>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="contato.html">Contato!</a></li>
+                    <li><a href="tudo-sobre-docker-1.html">Tudo sobre Docker Parte 1!</a></li>
+                    <li><a href="tudo-sobre-docker-2.html">Tudo sobre Docker Parte 2!</a></li>
+                    <li><a href="tudo-sobre-docker-3.html">Tudo sobre Docker Parte 3!</a></li>
+                    <li><a href="tudo-sobre-docker-4.html" onclick="alert('Você já Está na Matéria desse Link!'); return false">Tudo sobre Docker Parte 4!</a></li>
+                </menu>
+            </header>
+            
+<h2>Tudo sobre Docker Parte 4</h2>
+
+<h3>Importando e Exportando Imagens, Containers e Volumes</h3>
+
+<p>Para exportar uma imagem em um arquivo tar, digite isso no prompt:</p>
+
+<pre>
+<code>
+docker save -o minhaimagem.tar meuapp:latest
+</code>
+</pre>
+
+<p>Se quiser comprimir:</p>
+
+<pre>
+<code>
+docker save meuapp:latest | gzip > minhaimagem.tar.gz
+</code>
+</pre>
+
+<p>E para importar no outro computador, faça assim:</p>
+
+<pre>
+<code>
+docker load -i minhaimagem.tar
+</code>
+</pre>
+
+<p>Para exportar um container, digite esses comandos na ordem:</p>
+
+<pre>
+<code>
+docker commit meucontainer meuappcustom:latest
+
+docker save -o meuappcustom.tar meuappcustom:latest
+</code>
+</pre>
+
+<p>E para restaurar no outro computador:</p>
+
+<pre>
+<code>
+docker load -i meuappcustom.tar
+
+# Depois rode o docker run normalmente com todos os parâmetros.
+</code>
+</pre>
+
+<p>Para fazer o backup de volumes, faça assim:</p>
+
+<pre>
+<code>
+# Não esqueça do ponto:
+docker run --rm \
+  -v dadosvolume:/volume \
+  -v $(pwd):/backup \
+  alpine \
+  tar czf /backup/dadosvolume.tar.gz -C /volume .
+</code>
+</pre>
+
+<p>Isso gerará um tar com o volume.</p>
+
+<p>Para restaurar no outro computador:</p>
+
+<pre>
+<code>
+docker volume create dadosvolume
+
+docker run --rm \
+  -v dadosvolume:/volume \
+  -v $(pwd):/backup \
+  alpine \
+  sh -c "cd /volume && tar xzf /backup/dadosvolume.tar.gz"
+</code>
+</pre>
+
+<p>Para migrar uma aplicação completa, normalmente fazemos assim:</p>
+
+<ul>
+    <li>docker-compose.yml</li>
+    <li>imagem.tar</li>
+    <li>volume1.tar.gz</li>
+    <li>volume2.tar.gz</li>
+</ul>
+
+<p>E no computador de destino:</p>
+
+<pre>
+<code>
+docker load -i imagens.tar
+
+docker volume create volume1
+
+docker volume create volume2
+
+docker compose up -d
+</code>
+</pre>
+
+<h3>Trabalhando com Imagens no Docker Hub</h3>
+
+<p>Para enviar uma imagem para o Docker Hub, fazemos uma tag da imagem com o nome do seu repositório e depois faz push.</p>
+
+<p>Primeiro acesse o Docker Hub em <a href="https://hub.docker.com/" target="_blank">https://hub.docker.com/</a>, e depois no prompt, faça o login com docker login e digite seu usuário e senha (ou access token), depois digite docker images para verificar a imagem local. Para criar uma tag, faça assim:</p>
+
+<pre>
+<code>
+docker tag meuapp:latest nomedeusuario/meuapp:latest
+</code>
+</pre>
+
+<p>No Docker Hub, crie um repositório com o nome do seu app (deve ser o mesmo que a imagem), e envie a imagem com esse comando:</p>
+
+<pre>
+<code>
+docker push nomedeusuario/meuapp:latest
+</code>
+</pre>
+
+<p>Para baixar a mesma imagem em outro computador, faça o login também e digite esse comando:</p>
+
+<pre>
+<code>
+docker pull nomedeusuario/meuapp:latest
+</code>
+</pre>
+
+<p>E execute normalmente:</p>
+
+<pre>
+<code>
+docker run -d nomedeusuario/meuapp:latest
+</code>
+</pre>
+
+<p>PS: Se o repositório for privado, apenas usuários autorizados podem fazer pull. E volumes e containers não são armazenados no Docker Hub, apenas imagens. Docker Compose também não são armazenados no Docker Hub, mas podemos versionar ele num repositório baseado em Git.</p>
+
+<ul>
+    <li><a href="tudo-sobre-docker-3.html">Parte Anterior da Matéria!</a></li>
+    <!--<li><a href="tudo-sobre-docker-5.html">Continuação da Matéria!</a></li>-->
+</ul>
+        </div>
+    </body>
+</html>

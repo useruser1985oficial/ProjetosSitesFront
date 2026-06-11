@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Aprenda Python</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+    </head>
+    <body>
+        <div>
+            <header>
+                <h1>Aprenda Python</h1>
+                <menu>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="contato.html">Contato!</a></li>
+                    <li><a href="tudo-sobre-python-1.html">Tudo sobre Python Parte 1!</a></li>
+                    <li><a href="tudo-sobre-python-2.html">Tudo sobre Python Parte 2!</a></li>
+                    <li><a href="tudo-sobre-python-3.html">Tudo sobre Python Parte 3!</a></li>
+                    <li><a href="tudo-sobre-python-4.html">Tudo sobre Python Parte 4!</a></li>
+                    <li><a href="tudo-sobre-python-5.html">Tudo sobre Python Parte 5!</a></li>
+                    <li><a href="tudo-sobre-python-6.html">Tudo sobre Python Parte 6!</a></li>
+                    <li><a href="tudo-sobre-python-7.html">Tudo sobre Python Parte 7!</a></li>
+                    <li><a href="tudo-sobre-python-8.html">Tudo sobre Python Parte 8!</a></li>
+                </menu>
+            </header>
+
+<h2>Programção Orientada a Objetos em Python - Parte 1</h2>
+
+<h3>Criando Classes e Objetos na Prática</h3>
+
+<p>Como sabemos, uma variável simples é um espaço na memória, um local que fica reservado para <q>guardar</q> alguma coisa, como uma caixinha de papelão, vamos supor que esta caixinha tenha a etiqueta <q>estado</q>, e dentro dela colocamos um valor como <q>SP</q> (São Paulo), se tentarmos colocar outro valor (como <q>RJ</q>), o SP sai e dá lugar ao RJ. Exemplo:</p>
+
+<pre>
+<code>
+estado = "SP"
+estado = "RJ" # SP sai e entra RJ
+
+print(estado) # Exibe RJ
+</code>
+</pre>
+
+<p>Para guardarmos vários valores usamos variáveis compostas (como uma sequência de caixinhas com o nome <q>estados</q>), onde podemos colocar em cada uma delas um valor, com índices numerados a partir do 0 (como RJ, SP e CE), e ao acessar algo como <code>estados[2]</code> acessaremos o valor na <q>caixinha</q> 2 (no caso, CE), e podemos substituir esses valores também, isso no Python é o princípio de lista. Também temos os dicionários, onde podemos ter índices de nomes literais (como uma sequência de caixinhas com o nome <q>aluno</q> e índices como <q>nome</q>, <q>turma</q>, <q>nota</q> e <q>ativo</q>. Tanto em listas quanto em dicionários podemos ter valores de vários tipos numa mesma lista ou dicionário. Exemplos:</p>
+
+<pre>
+<code>
+estados = ["RJ", "SP", "CE"]
+
+estados[1] = "RS" # Substitui SP por RS
+
+print(estados[2]) # Exibe CE
+
+aluno = {"nome": "José", "turma": 301, "nota": 8.5, "ativo": True}
+
+print(aluno["nome"]) # Exibe José
+</code>
+</pre>
+
+<p>O maior problema em tudo isso é a separação entre dados e funções. Variáveis, tanto simples como compostas, só guardam dados. Para usar esses mesmos dados em funcionalidades, precisaríamos criar funções separadas pra isso.</p>
+
+<p>O ideal seria permitir que a variável execute funcionalidades internas, por isso que surgiu a programação orientada a objetos, que permite que a variável guarde funções também. De certa forma, um objeto é uma variável evoluída, que além de dados, guarda funcionalidades em métodos. Em outras palavras, objetos são variáveis que, além de guardar dados, podem fazer coisas com esses dados.</p>
+
+<p>PS: No Python, qualquer variável é considerada um objeto, isso geralmente acontece em muitas linguagens orientadas a objetos, mas não em todas.</p>
+
+<p>Em uma classe, devemos delimitar, por organização, as partes que colocamos os atributos, que geralmente vem primeiro, e depois os métodos. Para criar uma classe usamos a palavra <code>class</code> e por organização, deve ter a primeira letra maiúscula, com PascalCase permitido (como <code>class MinhaClasse</code>, e a tabulação é importante também, algo assim:</p>
+
+<pre>
+<code>
+class MinhaClasse:
+    # Atributos
+
+    # Métodos
+    
+obj = MinhaClasse() # Criação do objeto (instância).
+</code>
+</pre>
+
+<p>PS: Não confunda a instânciação de uma classe com a invocação de uma função, apesar dela também usar parênteses. Ela é a instanciação sim de um método, que é o construtor.</p>
+
+<p>Crie um arquivo Python e coloque esse código:</p>
+
+<pre>
+<code>
+# Declaração de classe:
+class Gafanhoto:
+    # Método construtor, onde ficará nossos atributos
+    def __init__(self):
+        # Atributos de instância
+        self.nome = ""
+        self.idade = 0
+
+    # Métodos de instância, que manipularão os atributos
+    def aniversario(self):
+        self.idade = self.idade + 1
+
+    def mensagem(self):
+        return f"{self.nome} é Gafanhoto(a) e tem {self.idade} anos de idade."
+
+# Declaração de objetos:
+</code>
+</pre>
+
+<p>O <code>self</code> será substituído pelo objeto a ser criado, e ele também deve estar em todo método da classe, inclusive o construtor.</p>
+
+<p>No caso acima, a classe é apenas um <q>molde</q> para criar os objetos, mas eles ainda não foram criados. Abaixo do comentário, crie um objeto, fora de qualquer tabulação, assim:</p>
+
+<pre>
+<code>
+# Declaração de objetos:
+g1 = Gafanhoto()
+
+print(g1.mensagem())
+</code>
+</pre>
+
+<p>No caso acima, a variável <q>g1</q> é um objeto que foi instanciado da classe Gafanhoto (que chamará automaticamente o método <code>__init__</code>, que é o construtor).</p>
+
+<p>Para chamar os atributos e métodos de um objeto, usamos o ponto, e os atributos não usam parênteses, apenas os métodos (sem o self, nesse caso).</p>
+
+<p>Claro, que como não colocamos nada nos atributos dele, ele vai mostrar uma string vazia pro nome e 0 anos de idade. Esses foram os valores iniciados dentro do construtor. Para colocar dados no objeto, fazemos assim, de forma básica:</p>
+
+<pre>
+<code>
+# Declaração de objetos:
+g1 = Gafanhoto()
+
+g1.nome = "Maria"
+g1.idade = 17
+
+print(g1.mensagem())
+</code>
+</pre>
+
+<p>Podemos utilizar os métodos assim:</p>
+
+<pre>
+<code>
+# Declaração de objetos:
+g1 = Gafanhoto()
+
+g1.nome = "Maria"
+g1.idade = 17
+
+g1.aniversario() # Adicionará 1 na idade
+
+print(g1.mensagem())
+</code>
+</pre>
+
+<p>Podemos criar outros objetos, onde um não terá vínculo com o outro, apesar de vierem da mesma classe:</p>
+
+<pre>
+<code>
+# Declaração de objetos:
+g1 = Gafanhoto()
+
+g1.nome = "Maria"
+g1.idade = 17
+
+g1.aniversario()
+
+print(g1.mensagem())
+
+g2 = Gafanhoto()
+
+g2.nome = "Mauro"
+g2.idade = 53
+
+print(g2.mensagem())
+</code>
+</pre>
+
+<p>No caso acima, os atributos e métodos serão manipulados apenas nos objetos que os chamaram, onde um não interfere no outro. Por isso que na classe têm o <code>self</code>, que significa <q>si mesmo</q>, ou seja, o próprio objeto que o chama.</p>
+
+<p>PS: Podemos criar as classes em módulos separados também.</p>
+
+<h3>Melhorando Classes e Criando uma Conta Bancária na Prática</h3>
+
+<p>Vamos salvar o código anterior num novo arquivo Python, e vamos melhorar esse código.</p>
+
+<p>Uma das melhorias vai ser usar métodos para manipular os atributos, pois o ideal é utilizar eles, ao invés de manipular os atributos diretamente.</p>
+
+<p>A primeira melhoria é no método construtor da classe Gafanhoto (__init__), no qual passaremos parâmetros para definir os atributos automaticamente, ao criar o objeto, assim:</p>
+
+<pre>
+<code>
+def __init__(self, n, i):
+    # Atributos de instância
+    self.nome = n
+    self.idade = i
+</code>
+</pre>
+
+<p>Nesse caso, podemos passar diretamente os atributos a serem configurados na criação do objeto, assim:</p>
+
+<pre>
+<code>
+g1 = Gafanhoto("Maria", 17)
+
+g1.aniversario()
+
+print(g1.mensagem())
+
+g2 = Gafanhoto("Mauro", 53)
+
+print(g2.mensagem())
+</code>
+</pre>
+
+<p>Com isso, ele criará os objetos da mesma forma, mas com menos linhas e mais segurança.</p>
+
+<p>No caso acima, os parâmetros no construtor são obrigatório, mas eles podem ser opcionais também, pra isso, altere o construtor assim:</p>
+
+<pre>
+<code>
+def __init__(self, n = "vazio", i = 0):
+    # Atributos de instância
+    self.nome = n
+    self.idade = i
+</code>
+</pre>
+
+<p>Dessa forma, caso não passe valores, ele receberá os valores predefinido no método construtor (no caso, a string <q>vazio</q> pra <q>n</q> e 0 para <q>i</q>.</p>
+
+<p>Podemos ver que, a alteração na classe já atualiza as características de todos os objetos oriundos do mesmo.</p>
+
+<p>Os parâmetros do construtor pode ter os mesmo nomes dos atributos da classe, assim:</p>
+
+<pre>
+<code>
+def __init__(self, nome = "vazio", idade = 0):
+    # Atributos de instância
+    self.nome = nome
+    self.idade = idade
+</code>
+</pre>
+
+<p>No caso acima, o <q>nome</q> e <q>idade</q> dos parâmetros estão <q>sozinhos</q>, e não devem ser confundidos com o nome e idade atributos da classe (estes contém o <q>self</q> antes).</p>
+
+<p>PS: Para descobrir o nome da classe, podemos fazer isso:</p>
+
+<pre>
+<code>
+print(int)
+</code>
+</pre>
+
+<p>E para ver a documentação da classe especificada, basta colocar <code>__doc__</code> na frente dela:</p>
+
+<pre>
+<code>
+print(int.__doc__)
+</code>
+</pre>
+
+<p>No entanto, isso só vale pra classes nativas do Python, por exemplo, int, str, tuple, list, e outras. Nos objetos e classes criados por nós (como a Gafanhoto), ele retornará <q>None</q>, dizendo que não tem manual, que deverá ser criados por nós mesmos. Para isso, basta colocar entre três aspas o código, nas primeiras linhas da classe, antes do restante do código, como se fazia pra documentar as funções, assim:</p>
+
+<pre>
+<code>
+class Gafanhoto:
+    """
+    Essa classe cria um Gafanhoto com nome e idade
+    
+    Para criar uma nova pessoa, use:
+    variavel = Gafanhoto(nome, idade)
+    """
+</code>
+</pre>
+
+<p>Ao mostrar um objeto puro, ele retorna o nome da classe e o endereço de memória dele, assim:</p>
+
+<pre>
+<code>
+print(g1)
+</code>
+</pre>
+
+<p>E ele mostrará algo tipo assim:</p>
+
+<pre>
+<code>
+&lt;__main__.Gafanhoto object at 0x00000291C1876E40&gt;
+</code>
+</pre>
+
+<p>Podemos personalizar a mensagem sobrescrevendo o método padrão das classes <code>__str__</code>, assim:</p>
+
+<pre>
+<code>
+def __str__(self):
+    return "Vou te mostrar uma coisa."
+</code>
+</pre>
+
+<p>No caso, por padrão, o método __str__ mostra o nome e o endereço do objeto, mas no código acima sobrescrevemos o método e escrevemos a frase especificada acima. Aí, ao executar <code>print(g1)</code> novamente, ele exibirá essa frase escrita. Sabendo isso, podemos colocar os dados do objeto nesse mesmo método, pra serem exibidos por padrão:</p>
+
+<pre>
+<code>
+def __str__(self):
+    return f"{self.nome} é Gafanhoto(a) e tem {self.idade} anos de idade."
+</code>
+</pre>
+
+<p>Assim, podemos remover tudo referente ao método mensagem, tanto na classe quanto nos objetos, e deixar o código assim:</p>
+
+<pre>
+<code>
+# Declaração de classe:
+class Gafanhoto:
+    """
+    Essa classe cria um Gafanhoto com nome e idade
+
+    Para criar uma nova pessoa, use:
+    variavel = Gafanhoto(nome, idade)
+    """
+    # Método Construtor, onde ficará nossos atributos
+    def __init__(self, nome = "vazio", idade = 0):
+        # Atributos de instância
+        self.nome = nome
+        self.idade = idade
+
+    # Métodos de Instância
+    def aniversario(self):
+        self.idade = self.idade + 1
+
+    # Métodos Sobrescritos
+    def __str__(self):
+        return f"{self.nome} é Gafanhoto(a) e tem {self.idade} anos de idade."
+
+# Declaração de objetos:
+g1 = Gafanhoto("Maria", 17)
+
+g1.aniversario()
+
+print(g1)
+
+g2 = Gafanhoto("Mauro", 53)
+
+print(g2)
+
+g3 = Gafanhoto()
+
+print(g3)
+</code>
+</pre>
+
+<p>Podemos mostrar os atributos do objeto em um dicionário, usando o atributo <code>__dict__</code>, assim:</p>
+
+<pre>
+<code>
+print(g1.__dict__)
+</code>
+</pre>
+
+<p>PS: Podemos usar o método <code>__getstate__()</code>, que funciona da mesma forma, só que este último é um método e pode ser sobrescrito na classe, assim:</p>
+
+<pre>
+<code>
+def __getstate__(self):
+    return f"Estado:\n\nnome = {self.nome}\nidade = {self.idade}"
+</code>
+</pre>
+
+<p>E assim, isso é adicionado em todos os objetos oriundos dessa classe:</p>
+
+<pre>
+<code>
+# Declaração de objetos:
+g1 = Gafanhoto("Maria", 17)
+
+g1.aniversario()
+
+print(g1.__getstate__())
+
+g2 = Gafanhoto("Mauro", 53)
+
+print(g2.__getstate__())
+
+g3 = Gafanhoto()
+
+print(g3.__getstate__())
+</code>
+</pre>
+
+<p>Para saber o nome da classe da qual um objeto se origina, coloque o atributo <code>__class__</code>, assim:</p>
+
+<pre>
+<code>
+print(g1.__class__)
+</code>
+</pre>
+
+<p>Para exemplificar o que foi aprendido até agora, vamso criar uma classe simulando uma conta bancária, para isso, crie um novo arquivo para exercício e faça assim:</p>
+
+<pre>
+<code>
+class ContaBancaria:
+    """
+    Cria uma conta bancária e permite fazer saques e depósitos
+    """
+
+    # Construtor
+    def __init__(self, id, nome, saldo = 0): # Apenas saldo é opcional, os outros são obrigatórios
+        self.id = id
+        self.titular = nome
+        self.saldo = saldo
+        print(f"Conta {self.id} criada com sucesso. Saldo atual de R${saldo:.2f}.")
+
+c1 = ContaBancaria(112, "Gustavo", 3000)
+
+print(c1)
+</code>
+</pre>
+
+<p>No caso acima, ele exibirá a classe e o endereço de memória do objeto, para ele exibir os dados do mesmo, sobrescreva na classe o método __str__ assim:</p>
+
+<pre>
+<code>
+def __str__(self):
+    return f"A conta {self.id} de {self.titular} tem R${self.saldo:.2f} de saldo."
+</code>
+</pre>
+
+<p>Podemos exibir o __doc__ assim:</p>
+
+<pre>
+<code>
+print(c1.__doc__)
+</code>
+</pre>
+
+<p>Agora, defina esses métodos de instância na classe, que por enquanto ficarão com o bloco vazio (que pro Python, deverão ter dentro apenas a palavra <code>pass</code>), assim:</p>
+
+<pre>
+<code>
+# Métodos de Instância:
+def depositar(self, valor):
+    pass
+
+def sacar(self, valor):
+    pass
+</code>
+</pre>
+
+<p>Aí, pra chamar os métodos, fazemos assim:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(112, "Gustavo", 3000)
+
+c1.depositar(500)
+c1.sacar(2000)
+
+print(c1)
+</code>
+</pre>
+
+<p>Só que, claro, ele não fará nada, para ele depositar o valor, fazemos assim no método depositar e sacar:</p>
+
+<pre>
+<code>
+def depositar(self, valor):
+    self.saldo += valor
+    print(f"Depósito de R${valor:.2f} autorizado na conta {self.id}.")
+
+def sacar(self, valor):
+    self.saldo -= valor
+    print(f"Saque de R${valor:.2f} autorizado na conta {self.id}.")
+</code>
+</pre>
+
+<p>Claro que isso é um código básico, ainda necessita várias melhorias, um exemplo é de sacar mais dinheiro do que tem na conta, por exemplo:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(112, "Gustavo", 3000)
+
+c1.depositar(500)
+c1.sacar(2_000_000) # É o mesmo que 2000000
+
+print(c1)
+</code>
+</pre>
+
+<p>No caso acima, ele sacará e ficará com um saldo negativo, mas não é assim que as contas funcionam na prática. Para isso, deveremos fazer métodos mais robustos. Veja como ficaria o método sacar, com a correção:</p>
+
+<pre>
+<code>
+def sacar(self, valor):
+    if valor > self.saldo:
+        print(f"Saque de R${valor:.2f} negado na conta {self.id}. Saldo insuficiente.")
+    else:
+        self.saldo -= valor
+        print(f"Saque de R${valor:.2f} autorizado na conta {self.id}.")
+</code>
+</pre>
+
+<p>PS: Podemos fazer outras melhorias, como colocar cores, por exemplo.</p>
+
+<h3>Rich no Python: Colocando a Biblioteca na Nossa Classe</h3>
+
+<p>Na classe ContaBancaria, coloque as importações da biblioteca Rich assim:</p>
+
+<pre>
+<code>
+from rich import print
+from rich import inspect
+</code>
+</pre>
+
+<p>E depois crie um objeto assim, e exiba ele com o inspect:</p>
+
+<pre>
+<code>
+c = ContaBancaria(111, "José", 500)
+
+inspect(c) # É melhor visualmente do que print(c.__getstate__())
+</code>
+</pre>
+
+<p>Ele mostrará todos os dados que colocamos anteriormente na classe, incluindo a documentação. Não esqueça de colocar a opção Emulate Terminal no Run With Parameters.</p>
+
+<ul>
+    <li><a href="poo-em-python-2.html">Continuação da Matéria!</a></li>
+</ul>
+
+        </div>
+    </body>
+</html>

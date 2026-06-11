@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Aprenda Python</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+    </head>
+    <body>
+        <div>
+            <header>
+                <h1>Aprenda Python</h1>
+                <menu>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="contato.html">Contato!</a></li>
+                    <li><a href="tudo-sobre-python-1.html">Tudo sobre Python Parte 1!</a></li>
+                    <li><a href="tudo-sobre-python-2.html">Tudo sobre Python Parte 2!</a></li>
+                    <li><a href="tudo-sobre-python-3.html">Tudo sobre Python Parte 3!</a></li>
+                    <li><a href="tudo-sobre-python-4.html">Tudo sobre Python Parte 4!</a></li>
+                    <li><a href="tudo-sobre-python-5.html">Tudo sobre Python Parte 5!</a></li>
+                    <li><a href="tudo-sobre-python-6.html">Tudo sobre Python Parte 6!</a></li>
+                    <li><a href="tudo-sobre-python-7.html">Tudo sobre Python Parte 7!</a></li>
+                    <li><a href="tudo-sobre-python-8.html">Tudo sobre Python Parte 8!</a></li>
+                </menu>
+            </header>
+
+<h2>Exercícios - Parte 10</h2>
+
+<p>Implemente o diagrama de classes com uma classe abstrata Poligono, com as filhas Quadrado e Circulo.</p>
+
+<p>Classes:</p>
+
+<pre>
+<code>
+from abc import ABC, abstractmethod
+import math
+
+class Poligono(ABC):
+    def __init__(self, qtdLados):
+        self.qtdLados = qtdLados
+
+    @abstractmethod
+    def perimetro(self) -> float:
+        pass
+
+    @abstractmethod
+    def area(self) -> float:
+        pass
+
+class Quadrado(Poligono):
+    def __init__(self, lado = 1):
+        super().__init__(4)
+        self.lado = lado
+
+    def perimetro(self):
+        return self.lado * 4
+
+    def area(self):
+        return self.lado ** 2
+
+class Circulo(Poligono):
+    def __init__(self, raio = 1):
+        super().__init__(0)
+        self.raio = raio
+
+    def perimetro(self):
+        return 2 * math.pi * self.raio
+
+    def area(self):
+        return math.pi * self.raio ** 2
+</code>
+</pre>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+from rich import print, inspect
+
+def main():
+    q = Quadrado(20)
+
+    print(f"Um quadrado de lado {q.lado}CM tem perímetro de {q.perimetro():.1f}CM.")
+    print(f"Um quadrado de lado {q.lado}CM tem área de {q.area():.1f}CM².")
+
+    c = Circulo(12)
+
+    print(f"Um círculo de raio {c.raio}CM tem perímetro de {c.perimetro():.1f}CM.")
+    print(f"Um círculo de raio {c.raio}CM tem área de {c.area():.1f}CM².")
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<hr/>
+
+<p>Simule uma cafeteira orientada a objetos, com a classe abstrata BebidaQuente, com as filhas Cafe, Cha e Leite.</p>
+
+<p>Classes:</p>
+
+<pre>
+<code>
+from rich import print
+from abc import ABC, abstractmethod
+
+class BebidaQuente(ABC):
+    @abstractmethod
+    def misturar(self):
+        pass
+
+    @abstractmethod
+    def servir(self):
+        pass
+
+    def preparar(self):
+        print("--- Iniciando o Preparo ---")
+        self.ferverAgua()
+        self.misturar()
+        self.servir()
+        print("--- Bebida Pronta ---")
+
+    def ferverAgua(self):
+        print("1. Fervendo água a 100 graus Celsius.")
+
+class Cafe(BebidaQuente):
+    def misturar(self):
+        print("2. Passando água pressurizada pelo pó do café moído.")
+
+    def servir(self):
+        print("3. Servindo em xícara pequena.")
+
+class Cha(BebidaQuente):
+    def misturar(self):
+        print("2. Mergulhando o sachê de ervas na água.")
+
+    def servir(self):
+        print("3. Servindo na caneca de porcelana com limão.")
+
+class Leite(BebidaQuente):
+    def misturar(self):
+        print("2. Passando água pressurizada pelo bico do leite.")
+
+    def servir(self):
+        print("3. Servindo na caneca grande, já com café.")
+</code>
+</pre>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+def main():
+    b1 = Cafe()
+    b2 = Cha()
+    b3 = Leite()
+
+    b1.preparar()
+    b2.preparar()
+    b3.preparar()
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<hr/>
+
+<p>Crie classes capazes de calcular frentes de veículos diferentes, com a classe abstrata Transporte e as filhas Moto, Caminhao e Drone.</p>
+
+<p>Classes:</p>
+
+<pre>
+<code>
+from abc import ABC, abstractmethod
+from rich import print, inspect
+
+class Transporte(ABC):
+    def __init__(self, distancia):
+        self.distancia = distancia
+        self.frete = 0
+
+    @abstractmethod
+    def calcularFrete(self):
+        pass
+
+class Moto(Transporte):
+    fator = 0.50
+
+    def __init__(self, distancia):
+        super().__init__(distancia)
+
+    def calcularFrete(self):
+        if self.distancia >= 0:
+            self.frete = self.distancia * Moto.fator
+
+            return f"R${self.frete:.2f}"
+        else:
+            self.frete = 0
+
+            return "Raio mínimo de 0 Km"
+
+class Caminhao(Transporte):
+    fator = 1.20
+
+    def __init__(self, distancia):
+        super().__init__(distancia)
+
+    def calcularFrete(self):
+        if self.distancia < 50:
+            self.frete = 0
+
+            return "Raio mínimo de 50 Km"
+        else:
+            self.frete = self.distancia * Caminhao.fator
+
+            return f"R${self.frete:.2f}"
+
+class Drone(Transporte):
+    fator = 9.50
+
+    def __init__(self, distancia):
+        super().__init__(distancia)
+
+    def calcularFrete(self):
+        if self.distancia < 0:
+            self.frete = 0
+
+            return "Raio mínimo de 0 Km"
+        elif self.distancia > 10:
+            self.frete = 0
+
+            return "Raio máximo de 10 Km"
+        else:
+            self.frete = self.distancia * Drone.fator
+
+            return f"R${self.frete:.2f}"
+</code>
+</pre>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+from rich.table import Table
+
+def main():
+    dist = 80
+
+    viagem = (Moto(dist), Caminhao(dist), Drone(dist))
+
+    tabela = Table(title = "Tabela de Fretes")
+
+    tabela.add_column("Distância")
+    tabela.add_column("Tipo")
+    tabela.add_column("Frete")
+
+    for item in viagem:
+        tabela.add_row(f"{dist} Km", f"{type(item).__name__}", f"{item.calcularFrete()}")
+
+    print(tabela)
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<hr/>
+
+<p>Crie a estrutura capaz de calcular salários de funcionários diferentes, com a classe abstrata Funcionario e as filhas Horista e Mensalista.</p>
+
+<p>Classes:</p>
+
+<pre>
+<code>
+from abc import ABC, abstractmethod
+from rich import inspect, print
+from rich.panel import Panel
+
+class Funcionario(ABC):
+    salarioMinimo = 1612
+    descontoInss = 7.5
+
+    def __init__(self, nome = None):
+        self.nome = nome
+        self.salarioBruto = 0
+        self.salario = 0
+
+    @abstractmethod
+    def calcularSalario(self):
+        pass
+
+    def analisarSalario(self):
+        base = self.salario / Funcionario.salarioMinimo
+        mensagem = f"O salário de [blue]{self.nome}[/]([magenta]{self.__class__.__name__}[/]) é de [green]R${self.salario:.2f}[/] e corresponde a [yellow]{base:.1f} salários mínimos[/]."
+        painel = Panel(mensagem, title = "Análise de Salário", width = 50)
+
+        print(painel)
+
+class FuncionarioHorista(Funcionario):
+    def __init__(self, nome, valorHora = 7.37, horasTrabalhadas = 220):
+        super().__init__(nome)
+        self.valorHora = valorHora
+        self.horasTrabalhadas = horasTrabalhadas
+        self.salarioBruto = self.valorHora * self.horasTrabalhadas
+
+    def calcularSalario(self):
+        self.salario = self.salarioBruto - (self.salarioBruto * Funcionario.descontoInss / 100)
+
+class FuncionarioMensalista(Funcionario):
+    def __init__(self, nome, salarioBruto = Funcionario.salarioMinimo):
+        super().__init__(nome)
+        self.salarioBruto = salarioBruto
+
+    def calcularSalario(self):
+        self.salario = self.salarioBruto - (self.salarioBruto * Funcionario.descontoInss / 100)
+</code>
+</pre>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+def main():
+    f1 = FuncionarioMensalista("José da Silva", 8500)
+    f2 = FuncionarioHorista("Maria de Souza", 25, 250)
+
+    f1.calcularSalario()
+    f1.analisarSalario()
+
+    f2.calcularSalario()
+    f2.analisarSalario()
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<hr/>
+
+<p>Simule o sistema de batalha entre personagens de um RPG, com a classe abstrata Personagem, com as filhas Guerreiro e Mago.</p>
+
+<p>Classes:</p>
+
+<pre>
+<code>
+from abc import ABC, abstractmethod
+import random
+from rich import print, inspect
+
+class Personagem(ABC):
+    def __init__(self, nome, vida):
+        self.nome = nome
+        self.vida = vida
+        self.golpes = tuple()
+
+    def atacar(self, alvo, forca = 100):
+        if self.vida > 0 and alvo.vida > 0:
+            golp = self.golpes[random.randrange(0, len(self.golpes))]
+
+            print(f"[green]{self.nome}[/]({self.vida}) atacou [red]{alvo.nome}[/]({alvo.vida}) com um [blue]{golp}[/] de força {forca}.")
+            alvo.receberDano(forca)
+        else:
+            print(f"O ataque [green]{self.nome}[/] -> [red]{alvo.nome}[/] não pode acontecer!")
+
+    def receberDano(self, dano):
+        fator = random.randint(0, dano)
+        self.vida -= fator
+
+        if self.vida < 0:
+            self.vida = 0
+
+        print(f"[blue]{self.nome}[/] recebeu [red]dano de {fator}[/].")
+
+    @abstractmethod
+    def curar(self):
+        pass
+
+class Guerreiro(Personagem):
+    def __init__(self, nome, vida):
+        super().__init__(nome, vida)
+        self.golpes = ("Soco", "Golpe de Machado", "Pulo Giratório")
+
+    def curar(self):
+        fator = random.randint(0, 100)
+        self.vida += fator
+        print(f"[blue]{self.nome}[/] enrolou uma atadura nos ferimentos e [green]recuperou {fator} pontos[/] de vida.")
+
+class Mago(Personagem):
+    def __init__(self, nome, vida):
+        super().__init__(nome, vida)
+        self.golpes = ("Bola de Fogo", "Raio de Luz", "Magia Estática")
+
+    def curar(self):
+        fator = random.randint(0, 100)
+        self.vida += fator
+        print(f"[blue]{self.nome}[/] fez uma magia de cura e [green]recuperou {fator} pontos[/] de vida.")
+</code>
+</pre>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+def main():
+    p1 = Guerreiro("Kratos", 1000)
+    p2 = Mago("Gandalf", 2000)
+
+    p1.atacar(p2, 200)
+    p2.atacar(p1, 200)
+
+    p1.curar()
+    p2.curar()
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<ul>
+    <li><a href="exercicios-9.html">Parte Anterior da Matéria!</a></li>
+    <li><a href="exercicios-11.html">Continuação da Matéria!</a></li>
+</ul>
+
+        </div>
+    </body>
+</html>

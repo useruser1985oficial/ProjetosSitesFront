@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Tudo sobre Tecnologia da Informação</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+        <script></script>
+    </head>
+    <body>
+        <div id="interface">
+            <header>
+                <h1><a href="index.html">Tudo sobre Tecnologia da Informação</a></h1>
+            </header>
+            
+<h2>Dicas para FTP, SSH e Telnet</h2>
+
+<p>Veja algumas dicas para conexões com FTP, SSH e Telnet. Alguns precisam ser instalados ou ativados no sistema operacional para serem usados. No Windows é só ir em Ativar ou Desativar Recursos do Windows e marcar os serviços escolhidos. No Linux e sistemas Unix eles já costumam vir instalados.</p>
+
+<h3>FTP</h3>
+
+<p>FTP é um protocolo para transferir arquivos. Basicamente fazemos assim para acessar um servidor (podendo usar o nome ou o IP):</p>
+
+<pre>
+<code>
+ftp nomeouipdoservidor.com
+</code>
+</pre>
+
+<p>Depois coloque o usuário e senha do servidor.</p>
+
+<p>Comandos comuns:</p>
+
+<pre>
+<code>
+ls
+
+get arquivo.txt # Pegar arquivo do servidor
+
+put arquivo.txt # Enviar arquivo pro servidor, podemos passar o caminho completo como "/caminho/arquivo.txt"
+
+bye # Encerra a conexão
+</code>
+</pre>
+
+<p>Podemos digitar apenas <code>ftp</code> no terminal e dentro dele digitar <code>open nomeouipdoservidor.com.br</code></p>
+
+<p>Podemos abrir o Filezilla também pra acessar um servidor FTP de forma gráfica. Abra o programa e em File vá em Connect to Server, coloque o nome ou ip do servidor, a porta (21 pra FTP padrão ou 22 para SFTP) e a senha, e clique em Ok.</p>
+
+<p>Um exemplo de servidor FTP público que podemos acessar é esse descrito abaixo, com esses dados:</p>
+
+<pre>
+<code>
+Host: ftp.gnu.org
+Usuário: anonymous
+Senha: qualquer email
+Porta: 21
+</code>
+</pre>
+
+<h3>SSH</h3>
+
+<p>SSH é um acesso remoto seguro a outro computador. Da mesma forma, fazemos assim:</p>
+
+<pre>
+<code>
+ssh usuario@nomeouipdoservidor.com
+</code>
+</pre>
+
+<p>PS: Em algumas distros Linux ele pode não estar instalado, para instalar o cliente no Linux, procure pelo pacote <code>openssh-client</code>.</p>
+
+<p>Pode ser assim também:</p>
+
+<pre>
+<code>
+ssh -l usuario nomeouipdoservidor.com
+</code>
+</pre>
+
+<p>Exemplo com porta diferente:</p>
+
+<pre>
+<code>
+ssh -p 2222 usuario@servidor.com
+</code>
+</pre>
+
+<p>Depois disso use os mesmos comandos do Unix para navegar. Para sair digite <code>logout</code> ou <code>exit</code>.</p>
+
+<p>Um servidor que podemos usar pra testes é esse, no qual vamos <q>avançando</q> de nível com a conexão SSH, nesse site aqui: <a href="https://overthewire.org/wargames/bandit/" target="_blank">https://overthewire.org/wargames/bandit/</a></p>
+
+<p>Para conectar no servidor acima, basta usar <code>ssh bandit0@bandit.labs.overthewire.org -p 2220</code> e coloque a senha <code>bandit0</code>.</p>
+
+<h3>Telnet</h3>
+
+<p>Telnet é um protocolo pra acesso remoto sem criptografia (antigo/inseguro).</p>
+
+<pre>
+<code>
+telnet nomedoservidor.com 23
+</code>
+</pre>
+
+<p>Exemplo com IP:</p>
+
+<pre>
+<code>
+telnet 192.168.0.10 23
+</code>
+</pre>
+
+<p>Alguns dos servidores que podemos usar para testes são o <code>telehack.com</code> e o <code>towel.blinkenlights.nl</code> (no primeiro dá pra navegar por ele, o segundo mostra imagens ASCII do Star Wars). Para usar um deles basta digitar <code>telnet telehack.com</code>, ele não pede senha. Pra deslogar digite <code>logout</code> e pra sair do Telnet digite <code>quit</code>.</p>
+
+<p>Também é usado para testar portas:</p>
+
+<pre>
+<code>
+telnet google.com 80
+</code>
+</pre>
+
+        <footer>
+            <p><a href="contato.html">Entre em Contato Conosco!</a></p>
+        </footer>
+        </div>
+    </body>
+</html>

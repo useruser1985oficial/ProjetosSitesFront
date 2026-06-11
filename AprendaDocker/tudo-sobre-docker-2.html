@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Aprenda Docker</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+    </head>
+    <body>
+        <div>
+            <header>
+                <h1>Aprenda Docker</h1>
+                <menu>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="contato.html">Contato!</a></li>
+                    <li><a href="tudo-sobre-docker-1.html">Tudo sobre Docker Parte 1!</a></li>
+                    <li><a href="tudo-sobre-docker-2.html" onclick="alert('Você já Está na Matéria desse Link!'); return false">Tudo sobre Docker Parte 2!</a></li>
+                    <li><a href="tudo-sobre-docker-3.html">Tudo sobre Docker Parte 3!</a></li>
+                    <li><a href="tudo-sobre-docker-4.html">Tudo sobre Docker Parte 4!</a></li>
+                </menu>
+            </header>
+            
+<h2>Tudo sobre Docker Parte 2</h2>
+
+<h3>Volumes e Mounts</h3>
+
+<p>Para podermos salvar dados, primeiro devemos entender como o Docker funciona. Vamos supor que o Docker é formado por camadas, tipo uma <q>cebola</q>.</p>
+
+<p>As imagens que usamos, que estão nas camadas mais abaixo, são somente-leitura, ou seja, são blindadas, ninguém <q>mexe</q>. Acima delas tem a camada de container, que é leitura e escrita. Quando a gente grava um arquivo, o conteúdo fica na camada do container, e a imagem não é alterada. Enquanto o container existir, os dados que estão dentro dele permanecerão, mesmo se pararmos ele (com o <code>stop</code>), é como deixar um carro na garagem. Já quando o container é removido (com o <code>rm</code>), essa camada é destruída e tudo que estava nela deixará de existir.</p>
+
+<p>Pra gente salvar os dados, devemos <q>furar</q> essa camada do container, pra conseguir gravar diretamente no HD do nosso computador (host). Para isso temos três maneiras:</p>
+
+<ul>
+    <li><b>Bind Mounts: </b>É um mapeamento direto, onde a gente liga uma pasta do nosso host à uma pasta do container. Ótimo para desenvolvimento.</li>
+    <li><b>Volumes: </b>O Docker cria uma área segura no nosso HD e ele gerencia essa área, é mais seguro e performático. É ideal para, por exemplo, banco de dados.</li>
+    <li><b>Tmpfs: </b>Ele grava os dados na memória RAM, bem mais rápido, mas é volátil (desligou, perdeu). É ideal pra dados como senhas.</li>
+</ul>
+
+<h3>Bind Mounts na Prática</h3>
+
+<p>Vamos supor que temos um arquivo index.html escrito que o site está em manutenção. Nós podemos atualizar o código no Docker sem dar rebuild e colocar ele no nosso container, na pasta html do Nginx.</p>
+
+<p>Pra criar o volume, vamos utilizar a flag <code>-v</code> no prompt. O lado esquerdo representa a pasta do nosso computador e o lado direito representa o diretório do container (no caso, a pasta html do Nginx, de forma parecida com o mapeamento de portas).</p>
+
+<p>Digite esse comando:</p>
+
+<pre>
+<code>
+docker run -d -p 8080:80 -v %cd%:/usr/share/nginx/html --name site-bind nginx
+</code>
+</pre>
+
+<p>PS: O <code>%cd%</code> representa o comando do CMD do Windows que retorna a pasta atual. Se usarmos outro shell, como o do Linux, usaremos <code>$(pwd)</code>. Podemos passar o caminho literal no lugar dele também.</p>
+
+<p>Ao rodar o comando, o container já estará rodando e fará a associação da pasta do nosso computador com o diretório do Nginx. Mas o projeto continuará no nosso computador, mesmo assim, poderemos acessar a URL pelo link <code>http://localhost:8080/</code>.</p>
+
+<p>Dessa forma, podemos até excluir o container que os arquivos do projeto não serão perdidos, pois eles estão no nosso computador, e não no container. Também poderemos alterar o arquivo no nosso computador e ele atualizará o link do localhost também, sem a necessidade de reconstruir o container do Docker.</p>
+
+<p>No entanto, isso tem uma desvantagem: Ele só rodaria sem problemas no nosso computador, podendo dar problemas caso transfira o mesmo pra outro computador. Pra isso usaremos outros recursos.</p>
+
+<h3>Volumes na Prática</h3>
+
+<p>Como visto anteriormente, ao usar o Bind Mounts para ligar uma pasta do nosso computador a um container, de forma que a exclusão do container não afetará nossos arquivos. Mas isso ainda não deixa os arquivos totalmente seguros, já que podemos excluir os mesmos sem querer. Pra resolver isso, usaremos os volumes.</p>
+
+<p>Os volumes gerenciados são criados em uma área segura do Docker, longe dos arquivos do usuário. Basicamente usaremos o mesmo comando do Bind Mounts, mas com algumas diferenças, ao invés de especificar um local no computador, especificaremos um nome para o volume.</p>
+
+<p>Vamos exemplificar com um simples arquivo HTML, e crie o container com o comando <code>docker run -d -p 8080:80 -v meu-volume:/usr/share/nginx/html --name site-vol nginx</code>, no caso, declararemos o nome do volume a ser criado no lugar da pasta do computador. O Docker perceberá que não é um caminho de sistema e criará um volume em uma área segura dentro dele. O container rodará em segundo plano.</p>
+
+<p>Só que, ao criar e rodar o container, o arquivo index não estará lá ainda, podemos conferir acessando <code>http://localhost:8080/</code>. Nós teremos que copiar os arquivos do nosso dispositivo para dentro do volume, pra isso usaremos a opção <q>cp</q>. Digite <code>docker cp . site-vol:/usr/share/nginx/html</code> (o ponto significa todos os arquivos na pasta atual, podemos especificar um arquivo específico). Nesse caso o arquivo exibido em localhost estará dentro do volume, sem nenhum vínculo ao arquivo no nosso computador, já que ele não estará com a pasta associada.</p>
+
+<p>PS: Para atualizar o arquivo já existente, basta fazer um novo cp pro volume, da mesma forma, como <code>docker cp index.html site-vol:/usr/share/nginx/html</code>.</p>
+
+<p>Caso o container seja excluído, o volume criado (no caso meu-volume) ainda estará na área segura do Docker, portanto, poderemos associar um novo container com esse mesmo volume, que os arquivos estarão todos lá intactos. Podemos ver no Docker Desktop os volumes criados. Lembrando que, ao enviar o container pra outro computador, os arquivos só poderão ser acessados caso enviemos também o volume associado.</p>
+
+<p>Vamos fazer um teste com um banco de dados, como o MySQL, e que nós cadastremos vários clientes, por exemplo. Caso o container seja removido, perderemos esses dados, mas podemos persistir os dados com volumes também.</p>
+
+<p>Crie um container com a imagem MySQL, informando a senha root do MySQL, com o comando <code>docker run -d --name mysql-teste -e MYSQL_ROOT_PASSWORD=123 mysql</code>. Ele criará e rodará o container em segundo plano. Caso deseje criar uma senha vazia, passe no parâmetro <q>-e</q> o valor <code>-e MYSQL_ALLOW_EMPTY_PASSWORD=yes</code>.</p>
+
+<p>PS: Como não usaremos mais o container site-vol, podemos parar ele com <code>docker stop site-vol</code>.</p>
+
+<p>Para criar um banco de dados dentro desse container, usaremos o comando <q>exec</q>, na forma <code>docker exec -it mysql-teste mysql -p</code> (atenção que ele pedirá a senha padrão na primeira vez, que é vazia, e espere alguns segundos pro servidor MySQL iniciar totalmente, caso dê erro rode o comando <code>docker exec -it mysql-teste mysqld</code> para iniciar totalmente o MySQL). Ele entrará no MySQL do container, pedirá a senha e já poderemos manipular o banco de dados. Rode esses comandos dentro do MySQL:</p>
+
+<pre>
+<code>
+create database cursos;
+
+use cursos;
+
+create table alunos (
+    nome varchar(50)
+)
+default charset = utf8;
+
+insert into alunos values
+('Fulano'),
+('Beltrano'),
+('Sicrano');
+
+select * from alunos;
+</code>
+</pre>
+
+<p>Agora vamos excluir o container de forma forçada usando o comando <code>docker rm -f mysql-teste</code>, pra simular um container excluído acidentalmente. No caso, todos os dados estariam perdidos.</p>
+
+<p>Ao rodar <code>docker volume ls</code>, veremos todos os volumes que estão no nosso Docker, como o meu-volume criado, e outros com nomes aleatórios.</p>
+
+<p>Vamos rodar novamente o comando pra criar o container da mesma forma, <code>docker run -d --name mysql-teste -e MYSQL_ROOT_PASSWORD=123 mysql</code>. O banco de dados criado anteriormente, assim como seus dados, não estarão mais lá. Podemos entrar no MySQL com o comando <code>docker exec -it mysql-teste mysql -p</code> e rodar dentro do MySQL o comando <code>show databases;</code>.</p>
+
+<p>Pra criar um container com banco de dados persistente com um volume, vamos usar o comando <code>docker run -d --name mysql-pro -e MYSQL_ROOT_PASSWORD=123 -v meus-dados:/var/lib/mysql mysql</code> pra ele criar um volume chamado <q>meus-dados</q> que armazenará nossos dados. A pasta /var/lib/mysql é a pasta padrão do MySQL. Veja se ele criou o volume rodando o comando <code>docker volume ls</code>.</p>
+
+<p>Vamos executar o comando <code>docker exec -it mysql-pro mysql -p</code> e rodar esses comandos no MySQL (lembre-se que pode dar erro caso o servidor não esteja rodando totalmente, então aguarde, e na primeira vez pode pedir a senha padrão, que é vazia). Dentro do MySQL, digite novamente esses comandos:</p>
+
+<pre>
+<code>
+create database cursos;
+
+use cursos;
+
+create table alunos (
+    nome varchar(50)
+)
+default charset = utf8;
+
+insert into alunos values
+('Fulano'),
+('Beltrano'),
+('Sicrano');
+
+select * from alunos;
+</code>
+</pre>
+
+<p>Saia do MySQL e <q>acidentalmente</q> exclua o container com o comando <code>docker rm -f mysql-pro</code>, e depois rode o comando <code>docker ps -a</code> pra ver se o container realmente foi excluído, e depois rode o comando <code>docker volume ls</code> pra ver se o volume <q>meus-dados</q> continua lá.</p>
+
+<p>Crie novamente o container com o comando <code>docker run -d --name mysql-pro -e MYSQL_ROOT_PASSWORD=123 -v meus-dados:/var/lib/mysql mysql</code>, aguarde o banco de dados carregar, rode o comando <code>docker exec -it mysql-pro mysql -p</code> e dentro do MySQL, rode esses comandos:</p>
+
+<pre>
+<code>
+show databases;
+
+use cursos;
+
+select * from alunos;
+</code>
+</pre>
+
+<p>Podemos ver que os dados colocados anteriormente continuaram no volume (incluindo a senha configurada anteriormente), e estarão guardados exatamente o que colocamos no container anteriormente excluído.</p>
+
+<p>Lembrando que o Docker é Linux, e os arquivos do volume estarão lá dentro. Podemos rodar o comando <code>docker volume inspect meus-dados</code> para ver os dados referentes a esse volume que criamos. Os dados estarão no nosso HD, mas dentro do Docker.</p>
+
+<p>Para excluir um volume, use o nome do volume com o rm, como <code>docker volume rm meu-volume</code>. Só poderemos excluir volumes que não estejam sendo usados por nenhum container, nesse caso exclua todos os container que usam esse volume primeiro. Para excluir todos os volumes não utilizados, use o comando <code>docker volume prune</code>.</p>
+
+<h3>Bridge, Host ou None? Aprenda Sobre as Redes do seu Container Docker</h3>
+
+<p>Vamos pensar no Docker como um condomínio fechado, e os container são as casas do mesmo, e de dentro delas, nós temos saída pras ruas, mas ninguém que tá na rua tem acesso ao condomínio sem a autorização da portaria. Isso tem a ver com o parâmetro <code>-p</code> que usamos na criação do container. Para ver as redes do container, nós usamos o comando <code>docker network</code>, digitando assim, nós listamos as opções do comando, para listar as redes usamos <code>docker network ls</code></p>
+
+<p>Por padrão, ele lista três tipos de redes: Bridge, host e none, com essas diferenças:</p>
+
+<ul>
+    <li><b>Bridge:</b> É o padrão, todo container nascerá com essa rede, caso não mudarmos, como a analogia com o condomínio.</li>
+    <li><b>Host:</b> Remove um pouco o isolamento, nesse caso, ele vai usar a mesma placa de rede e serviço do nosso computador.</li>
+    <li><b>None:</b> Ele isolará o container de tudo, ele não vai ter internet, acesso à rede, nada disso. É uma proteção de segurança máxima contra acesso externo.</li>
+</ul>
+
+<p>Vamos criar dois containers com o Alpine, com os comandos <code>docker run -dit --name container1 alpine</code> e <code>docker run -dit --name container2 alpine</code>. Os dois rodarão em segundo plano e podemos ver isso com o comando <code>docker ps</code>. Para visualizar as configurações de um dos containers, digite o comando <code>docker inspect container1</code>, ele mostrará um JSON com as configurações, e procurando por <q>NetworkSettings</q>, podemos ver o IP privado do container, que será específico dele (algo como <code>172.17.0.2</code>, por exemplo). Faça o mesmo com o segundo container e pegue o IP dele (que deverá ser, no caso, <code>172.17.0.3</code>, portanto estarão na mesma rede os dois containers, como se tivessem ligados a um <q>switch</q> virtual).</p>
+
+<p>Com essas informações, nós podemos acessar um container e acessar ou executar algo do outro container pela rede. Vamos supor que no container1 nós executamos o ping no container2, pelo IP. Pra isso digite o comando <code>docker exec -it container1 ping 172.17.0.3</code>, e nós conseguiremos <q>pingar</q> o outro container. Mas os containers são voláteis, e ao reiniciar o container, ele pode pegar outro IP diferente, nesse caso usamos o DNS (nomes), mas no modo bridge, que é o que usamos agora, o DNS não vai funcionar.</p>
+
+<p>Vamos tentar <q>pingar</q> o container de novo, mas com o nome dele ao invés do IP, com <code>docker exec -it container1 ping container2</code>, ele não conseguirá acessar o outro container e dará erro.</p>
+
+<p>Podemos melhorar o desempenho da rede sem que tenhamos que passar pelo <q>roteador</q> do Docker, nesse caso usaremos o modo host. No modo host, o container <q>rouba</q> o IP da nossa máquina, ele deixa de ter um isolamento por porta. Podemos utilizar por exemplo a imagem no Nginx, que rodará a porta 80 do nosso computador, sem ter que linkarmos as portas com o parâmetro <q>-p</q>. Vamos criar um container no modo host com o comando <code>docker run -dit --network host --name nginx-direto nginx</code>, se a porta 80 não tiver sendo usada por outro processo, poderemos acessar ela. Vamos criar um outro container com o comando <code>docker run -dit --network host --name container3 alpine.</code>, e depois digite o comando <code>docker exec -it container3 ping google.com</code> pra ele <q>pingar</q> o Google, e nesse caso ele usará a placa de rede do nosso computador, sem passar pela rede do Docker.</p>
+
+<p>Vamos criar um quarto container totalmente isolado com o none, com o comando <code>docker run -dit --name container4 --network none alpine</code>, depois tente <q>pingar</q> o Google com o comando <code>docker exec -it container4 ping google.com</code>, ele não conseguirá por estar totalmente isolado de qualquer rede.</p>
+
+<p>No entanto, nós ainda temos um problema, como um container acessar outro sem saber o IP dele? Nesse caso nós usaremos DNS (nomes), que aprenderemos mais pra frente.</p>
+
+<h3>Conecte Container pelo Nome</h3>
+
+<p>Para não termos problemas com mudança de IP ao reinicializar o container, podemos associar os mesmos com um nome.</p>
+
+<p>Primeiramente, digite o comando <code>docker network</code> para vermos as opções para redes disponíveis no Docker. Para criar uma rede com um nome digite o comando <code>docker network create rede-teste</code>. Para listar as redes e vermos a rede criada, digite <code>docker network ls</code></p>
+
+<p>Ao digitar esse comando, nós criamos uma espécie de <q>switch</q> virtual onde nossos container a utilizarão. Vamos criar o container de forma que ele use essa rede, com o comando <code>docker run -dit --name ctrede1 --network rede-teste alpine ash</code> e crie um segundo container com <code>docker run -dit --name ctrede2 --network rede-teste alpine ash</code>.</p>
+
+<p>Vamos pingar o ctrede2 pelo ctrede1. Para isso use o comando <code>docker exec -it ctrede1 ping ctrede2</code>. Ele pingará pelo nome, ao invés do IP. Poderemos reiniciar os containers que, mesmo se o IP mudar, o nome permanecerá o mesmo, e poderemos pingar normalmente, da mesma forma caso o container 2 seja excluído e seja criado outro semelhante com o mesmo nome.</p>
+
+<p>Temos também como associar um container criado anteriormente com a rede que criamos, posteriormente. Para testar isso, crie um container sem indicar a rede, com <code>docker run -dit --name rede-intrusa alpine ash</code>.</p>
+
+<p>Podemos tentar pingar o rede-intrusa com o comando <code>docker exec -it ctrede1 ping rede-intrusa</code>, ele não encontrará o container criado. Para associarmos esse container com a rede que criamos, use o comando <code>docker network connect rede-teste rede-intrusa</code>, e depois disso tente pingar novamente com o mesmo comando anterior, agora podemos conectar com o nome do container, mesmo se o IP mudar.</p>
+
+<p>Para ver os containers que estão usando a nossa rede, digite o comando <code>docker network inspect rede-teste</code>, ele retornará um JSON enorme com todos os container conectados a ele.</p>
+
+<p>No entanto, ainda temos um problema, para subir uma aplicação, como um site ou um banco de dados, se usarmos vários containers diferentes dará muito trabalho e ficará mais propenso a erros, no entanto, poderemos facilitar, escrevendo esses comandos num arquivo de texto, conhecido como Docker Compose, que veremos mais pra frente.</p>
+
+<h3>Docker Compose</h3>
+
+<p>Para facilitar a criação de container, com volume, redes e tudo o que for necessário, podemos usar o Docker Compose. Isso é útil inclusive pra compartilhar os containers. Basicamente, o Docker Compose lê um script e faz um passo-a-passo e vai executar tudo o que precisa ser feito. Para tanto, usaremos um arquivo com o nome <q>docker-compose.yaml</q> (pode ser yml ou yaml).</p>
+
+<p>PS: Para criar um Docker Compose, temos que prestar atenção no espaçamento e na indentação.</p>
+
+<p>Vamos supor uma pasta com algum site (pode ser um simples index.html), vamos colocar ele no nosso projeto. Vamos criar na mesma pasta do projeto (não é dentro da pasta do site) um arquivo com o nome docker-compose.yaml, que terá esse código:</p>
+
+<pre>
+<code>
+services:
+  meusite:
+    image: nginx:latest
+    container_name: meuexemplodesite
+    ports:
+      - "8080:80" # Isso são arrays, tudo que tiver após a cerquilha é comentário
+    volumes:
+      - ./website:/usr/share/nginx/html/
+</code>
+</pre>
+
+<p>O service é obrigatório, e onde está o nome meusite pode ser qualquer nome, e dentro dele definimos a imagem da qual criaremos nosso container, o nome do container e o mapeamento das portas que ele utilizará, sendo a primeira do host (nosso PC) e a segunda do container. Definimos o volume a ligação da pasta do nosso computador à pasta do container.</p>
+
+<p>Para vermos as opções dos comandos do Docker Compose, basta usar o comando <code>docker compose</code>, e pra criar o container com tudo planejado, vá na mesma pasta do arquivo yaml e digite <code>docker compose up</code>. Depois disso, no nosso PC, acesse o link localhost, com <code>http://localhost:8080</code>.</p>
+
+<p>PS: Em sistemas Linux pode ser exigido o comando <code>docker-compose</code> com o tracinho entre as duas palavras, como <code>docker-compose up</code>.</p>
+
+<p>Para criar um container com o modo detach, use o comando <code>docker compose up -d</code>. Ele não dará erro, pois atualizará e iniciará o container criado.</p>
+
+<p>Podemos também usar o Compose pra remover tudo, com o comando <code>docker compose down</code>, sem ter que parar coisa com coisa até remover tudo. O down não remove imagens nem volumes, apenas os containers. Para remover volumes, use esse comando com o parâmetro <code>-v</code>.</p>
+
+<p>No caso de nós querermos alterar algo no nosso container, como ao adicionar mais serviços, podemos editar no arquivo Docker Compose da mesma forma. Deixe o Docker Compose assim:</p>
+
+<pre>
+<code>
+services:
+  meusite:
+    image: nginx:latest
+    container_name: meuexemplodesite
+    ports:
+      - "8080:80"
+    volumes:
+      - ./website:/usr/share/nginx/html/
+
+  meubanco:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: nomedobanco
+    volumes:
+      - dados-mysql:/var/lib/mysql/
+
+volumes:
+  dados-mysql:
+</code>
+</pre>
+
+<p>Onde está meubanco pode ser qualquer nome também, seguindo a mesma regra do meusite. Mas ainda não execute o Docker Compose, pois podemos exigir a dependência de algo que deverá estar no container (no caso, nosso banco de dados), assim:</p>
+
+<pre>
+<code>
+services:
+  meusite:
+    image: nginx:latest
+    container_name: meuexemplodesite
+    ports:
+      - "8080:80"
+    volumes:
+      - ./website:/usr/share/nginx/html/
+    depends_on:
+      - meubanco
+
+  meubanco:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: nomedobanco
+    volumes:
+      - dados-mysql:/var/lib/mysql/
+
+volumes:
+  dados-mysql:
+</code>
+</pre>
+
+<p>Agora sim digite o comando <code>docker compose up</code>. Podemos rodar também no modo detach, com <code>docker compose up -d</code>, sem precisar parar e reconstruir nada. Depois podemos limpar depois com <code>docker compose down</code>.</p>
+
+<p>PS: O Docker Compose, de certa forma, também é tipo uma documentação do nosso container.</p>
+
+<h3>Comunicação entre Containers na Prática</h3>
+
+<p>Para administrar nosso banco de dados MySQL, podemos usar o Adminer, que é semelhante ao PHPMyAdmin, mas bem mais leve. Mas precisaremos configurar ele pra isso. Não poderemos colocar no IP localhost ou 127.0.0.1, nem o IP do container. A configuração vai ser no nosso Docker Compose. Deixe o Docker Compose assim:</p>
+
+<pre>
+<code>
+services:
+  # Vamos deixar só o banco:
+  meubanco:
+    image: mysql:5.7
+    container_name: mysql-curso
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: nomedobanco
+    volumes:
+      - dados-mysql:/var/lib/mysql/
+
+  minhabase:
+    image: adminer
+    container_name: minhabase
+    ports:
+      - "8090:8080"
+    depends_on:
+      - meubanco
+
+volumes:
+  dados-mysql:
+</code>
+</pre>
+
+<p>Para subir o serviço no modo detach, digite <code>docker compose up -d</code>. Ele já vai criar a rede e o volume automaticamente, além dos dois containers. Tudo isso foi descrito no Docker Compose. Ao rodar o mesmo comando novamente, ele vai rodar os container criados, sem precisar recriar tudo de novo do zero.</p>
+
+<p>Para configurar o Adminer, podemos entrar no link <code>http://localhost:8090</code> e lá podemos configurar nosso banco com o sitema de banco, servidor, usuário, senha e banco de dados, tudo isso foi configurado no nosso container. No caso fica assim:</p>
+
+<pre>
+<code>
+Sistema: MySQL/MariaDB.
+Servidor: mysql-curso.
+Usuário: root.
+Senha: 123.
+Base de Dados: (Deixe vazio).
+</code>
+</pre>
+
+<p>PS: Espere ele carregar o servidor completamente antes de tentar logar.</p>
+
+<p>Podemos listar as redes criadas digitando <code>docker network ls</code>, e os volumes com <code>docker volume ls</code>.</p>
+
+<h3>O Guia Definitivo de Variáveis de Ambiente</h3>
+
+<p>No nosso exemplo anterior, o Docker Compose tinha a senha do banco de dados de forma literal, mas podemos usar variáveis de ambiente para <q>mascarar</q> dados sensíveis.</p>
+
+<p>O arquivo deverá se chamar <q>.env</q>, e deverá estar na mesma pasta do Docker Compose, e ser escrito dessa forma (tudo com <q>#</q> é comentário):</p>
+
+<pre>
+<code>
+# Configurações do MySQL
+# As variáveis podem ter qualquer nome:
+
+DB_SENHA=123
+DB_USER=root
+DB_NOME=nomedobanco
+
+# Configuração do Adminer:
+
+PORTA_ADMINER=8090
+</code>
+</pre>
+
+<p>E aí, pra usar as variáveis, basta colocar elas entre <code>${}</code>, dessa forma, no Docker Compose:</p>
+
+<pre>
+<code>
+services:
+  # Vamos deixar só o banco:
+  meubanco:
+    image: mysql:5.7
+    container_name: mysql-curso
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_SENHA}
+      MYSQL_DATABASE: ${DB_NOME}
+    volumes:
+      - dados-mysql:/var/lib/mysql/
+
+  minhabase:
+    image: adminer
+    container_name: minhabase
+    ports:
+      - "${PORTA_ADMINER}:8080"
+    depends_on:
+      - meubanco
+
+volumes:
+  dados-mysql:
+</code>
+</pre>
+
+<p>Agora, exclua os containers anteriores manualmente, e as imagens deles também:</p>
+
+<pre>
+<code>
+docker rm minhabase
+
+docker rm mysql-curso
+
+docker rmi adminer
+
+docker rmi mysql:5.7
+</code>
+</pre>
+
+<p>E aí você digita <code>docker compose config</code> para verificar a configuração dos valores que estão nas variáveis. Depois é só rodar o Docker Compose com <code>docker compose up -d</code>. Ele vai baixar as imagens novamente, criar os containers, redes e tudo mais que ele precisar.</p>
+
+<p>Aí é só entrar no <code>http://localhost:8090</code> novamente, e digitar os mesmos dados anteriormente no Adminer.</p>
+
+<p>PS: O arquivo .env não deve ser compartilhado entre outras pessoas, e nem deve subir para repositórios como o GitHub. Nesse caso podemos colocar um arquivo pra explicar as instruções, que pode ser um arquivo de texto assim:</p>
+
+<pre>
+<code>
+# Salve o arquivo como .env e coloque o nome de usuário e senha:
+
+# Configurações do MySQL
+
+DB_SENHA=COLOQUE_SUA_SENHA
+DB_USER=COLOQUE_SEU_NOME_DE_USUARIO
+DB_NOME=nomedobanco
+
+# Configuração do Adminer:
+
+PORTA_ADMINER=8090
+</code>
+</pre>
+
+<ul>
+    <li><a href="tudo-sobre-docker-1.html">Parte Anterior da Matéria!</a></li>
+    <li><a href="tudo-sobre-docker-3.html">Continuação da Matéria!</a></li>
+</ul>
+        </div>
+    </body>
+</html>

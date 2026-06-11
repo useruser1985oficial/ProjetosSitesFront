@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Aprenda Algoritmos</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+    </head>
+    <body>
+        <div>
+            <header>
+                <h1>Aprenda Algoritmos</h1>
+                <menu>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="contato.html">Contato!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-1.html">Tudo sobre Algoritmos Parte 1!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-2.html">Tudo sobre Algoritmos Parte 2!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-3.html">Tudo sobre Algoritmos Parte 3!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-4.html">Tudo sobre Algoritmos Parte 4!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-5.html">Tudo sobre Algoritmos Parte 5!</a></li>
+                </menu>
+            </header>
+
+<h2>Orientação a Objetos - Parte 2</h2>
+
+<h3>Métodos Construtores</h3>
+
+<p>O construtor é um método especial que é chamado automaticamente quando um objeto é criado com new. Ele serve para inicializar o objeto, ou seja, definir valores iniciais para os atributos, como se fossem parâmetros.</p>
+
+<p>Os métodos construtores têm características importantes:</p>
+
+<ul>
+    <li>Tem o mesmo nome da classe.</li>
+    <li>Não tem nenhum tipo de retorno, nem mesmo <q>void</q>.</li>
+    <li>É usado para montar o objeto já pronto pro uso.</li>
+</ul>
+
+<p>PS: Isso acima é pra linguagens estaticamente tipadas como o Java, C# e C++. Linguagens como PHP e Python têm métodos especiais para usarmos como construtores (no caso, <code>__construct()</code> e <code>__init__()</code>, respectivamente).</p>
+
+<p>Com o construtor, você já cria o objeto com valores definidos, sem precisar ficar escrevendo vários setters depois da criação, independente da visibilidade dos atributos.</p>
+
+<p>Veja a classe Carro com o método construtor:</p>
+
+<pre>
+<code>
+public class Carro {
+    // Atributos privados (encapsulados)
+    private String cor;
+    private String modelo;
+    private int velocidade;
+
+    // Métodos públicos
+    public void acelerar() {
+        this.velocidade += 10;
+    }
+
+    public void frear() {
+        this.velocidade -= 10;
+    }
+    
+    // Construtor com parâmetros e atribuições
+    public Carro(String cor, String modelo, int velocidade) {
+        this.cor = cor;
+        this.modelo = modelo;
+        this.velocidade = velocidade;
+    }
+
+    // Getters e Setters
+    public String getCor() {
+        return this.cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
+
+    public String getModelo() {
+        return this.modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public int getVelocidade() {
+        return this.velocidade;
+    }
+
+    public void setVelocidade(int velocidade) {
+        this.velocidade = velocidade;
+    }
+}
+</code>
+</pre>
+
+<p>E a instanciação pode ser feita assim:</p>
+
+<pre>
+<code>
+// Criando o objeto com os atributos definidos, dispensando os setters nesse caso
+Carro cr = new Carro("Vermelho", "Uno", 0);
+
+// Usando os métodos
+cr.acelerar();
+System.out.println("Cor: " + cr.getCor());
+System.out.println("Modelo: " + cr.getModelo());
+System.out.println("Velocidade atual: " + cr.getVelocidade());
+
+cr.frear();
+System.out.println("Velocidade atual: " + cr.getVelocidade());
+</code>
+</pre>
+
+<p>PS: Se uma classe não tiver um construtor definido, a linguagem cria automaticamente um construtor padrão, que é vazio e não faz nada. Quando criamos nosso próprio construtor, esse passa a ser o construtor usado ao criar objetos. Em linguagens como Java, C# e C++, é possível ter vários construtores na mesma classe, desde que eles tenham listas de parâmetros diferentes (conceito conhecido como polimorfismo de sobrecarga, que veremos mais pra frente). Um deles pode ser vazio se quisermos. Por exemplo:</p>
+
+<pre>
+<code>
+// Sobrecarga de construtores:
+
+// Passando velocidade:
+public Carro(String cor, String modelo, int velocidade) {
+    this.cor = cor;
+    this.modelo = modelo;
+    this.velocidade = velocidade;
+}
+
+// Sem passar velocidade:
+public Carro(String cor, String modelo) {
+    this.cor = cor;
+    this.modelo = modelo;
+    this.velocidade = 0;
+}
+
+// Construtor vazio:
+public Carro() {
+
+}
+</code>
+</pre>
+
+<p>Aí, no caso acima, podemos passar ou não a velocidade, ou mesmo criar um objeto sem atribuir nada, a diferença de parâmetros definirá qual construtor será chamado pelo objeto. Podemos chamar construtores consecutivos assim, fazendo o encadeamento:</p>
+
+<pre>
+<code>
+// Sobrecarga de construtores:
+
+// Passando velocidade:
+public Carro(String cor, String modelo, int velocidade) {
+    this.cor = cor;
+    this.modelo = modelo;
+    this.velocidade = velocidade;
+}
+
+// Sem passar velocidade:
+public Carro(String cor, String modelo) {
+    this(cor, modelo, 0);
+}
+
+// Construtor vazio:
+public Carro() {
+    this(null, null, 0);
+}
+</code>
+</pre>
+
+<p>E criando os objetos:</p>
+
+<pre>
+<code>
+Carro cr = new Carro("Vermelho", "Uno", 0);
+
+// Usando os métodos
+cr.acelerar();
+System.out.println("Cor: " + cr.getCor());
+System.out.println("Modelo: " + cr.getModelo());
+System.out.println("Velocidade atual: " + cr.getVelocidade());
+
+cr.frear();
+System.out.println("Velocidade atual: " + cr.getVelocidade());
+
+Carro cr2 = new Carro("Preto", "Gol"); // Sem passar velocidade
+
+// Usando os métodos
+cr2.acelerar();
+System.out.println("Cor: " + cr2.getCor());
+System.out.println("Modelo: " + cr2.getModelo());
+System.out.println("Velocidade atual: " + cr2.getVelocidade());
+
+cr2.frear();
+System.out.println("Velocidade atual: " + cr2.getVelocidade());
+
+Carro cr3 = new Carro(); // Sem passar nada
+
+// Definindo valores para os atributos:
+cr3.setCor("Azul");
+cr3.setModelo("Civic");
+cr3.setVelocidade(0);
+
+// Usando os métodos
+cr3.acelerar();
+System.out.println("Cor: " + cr3.getCor());
+System.out.println("Modelo: " + cr3.getModelo());
+System.out.println("Velocidade atual: " + cr3.getVelocidade());
+
+cr3.frear();
+System.out.println("Velocidade atual: " + cr3.getVelocidade());
+</code>
+</pre>
+
+<h3>Método Destrutor</h3>
+
+<p>Um destrutor é um método especial que é executado automaticamente quando um objeto está prestes a ser destruído, ou seja, quando ele sai de uso na memória. Ele serve para limpar recursos, como fechar arquivos, liberar memória, desconectar algo, etc.</p>
+
+<p>Os métodos destrutores têm características importantes:</p>
+
+<ul>
+    <li>Tem o mesmo nome da classe, mas começa com um til (<q>~</q>).</li>
+    <li>Não recebe parâmetros.</li>
+    <li>Não tem nenhum tipo de retorno, nem mesmo <q>void</q>.</li>
+    <li>É muito útil quando precisamos liberar recursos manualmente.</li>
+</ul>
+
+<p>PS: Isso acima é basicamente para o C++. Linguagens como PHP e Python têm métodos especiais para usarmos como destrutores (no caso, <code>__destruct()</code> e <code>__del__()</code>, respectivamente).</p>
+
+<p>Em linguagens como o Java, não existe destrutor porque essa linguagem usa um coletor de lixo (garbage collector), que faz a limpeza da memória automaticamente. Linguagens como PHP e Python até possuem destrutores, mas também fazem coleta automática, como a maioria das linguagens modernas. O destrutor é mais necessário em linguagens como C++, onde o programador precisa liberar recursos manualmente.</p>
+
+<p>Veja um exemplo de destrutor em C++, numa classe baseada no mesmo Carro acima:</p>
+
+<pre>
+<code>
+Carro::~Carro() {
+    cout &lt;&lt; "Carro Destruído: " &lt;&lt; this-&gt;modelo &lt;&lt; endl;
+}
+</code>
+</pre>
+
+<p>E aí para destruir o objeto, basta chamar no código principal <code>delete</code> seguido do nome dele, no caso, <code>delete carro;</code>. Faça isso no final do código principal.</p>
+
+<h3>Atributos e Métodos Estáticos</h3>
+
+<p>Atributos e métodos estáticos (<code>static</code>) pertencem à classe, não aos objetos. Isso significa que:</p>
+
+<ul>
+    <li>Um atributo estático é compartilhado por todos os objetos da classe.</li>
+    <li>Um método estático pode ser chamado sem criar um objeto, usando o nome da classe.</li>
+</ul>
+
+<p>Eles são usados quando algo deve ser comum a todos os objetos ou quando não faz sentido depender de uma instância para funcionar.</p>
+
+<p>Veja um exemplo simples de classe totalmente com métodos e atributos estáticos:</p>
+
+<pre>
+<code>
+public class UtilMath {
+    // Constante estática (valor que não muda)
+    public static final double PI = 3.14159265359;
+
+    // Método estático para calcular área de um quadrado
+    public static double areaQuadrado(double lado) {
+        return lado * lado;
+    }
+
+    // Método estático para calcular área de um círculo
+    public static double areaCirculo(double raio) {
+        return PI * raio * raio;
+    }
+}
+</code>
+</pre>
+
+<p>No código principal:</p>
+
+<pre>
+<code>
+// Chamando métodos estáticos diretamente pela classe
+double areaQ = UtilMath.areaQuadrado(5);
+double areaC = UtilMath.areaCirculo(3);
+
+System.out.println("Área do quadrado: " + areaQ);
+System.out.println("Área do círculo: " + areaC);
+
+// Acessando constante estática
+System.out.println("Valor de PI: " + UtilMath.PI);
+</code>
+</pre>
+
+<p>Entenda também que:</p>
+
+<ul>
+    <li>Não precisa criar objetos, chamamos diretamente pelo nome da classe.</li>
+    <li>Constantes estáticas (<code>static final</code>) são valores que não mudam e pertencem à classe. Algumas linguagens usam no lugar coisas como <code>const</code>. Um atributo pode ter só <code>static</code> e nesse caso ele pode ser alterado, mas continua estático (ou seja, pertencendo à classe).</li>
+    <li>Cálculos matemáticos são um ótimo exemplo de uso de métodos estáticos, porque não dependem de atributos de um objeto.</li>
+    <li>Um atributo ou método estático pode ser privado ou protegido, seguindo as mesmas regras descritas anteriormente, inclusive também podem ter getters e setters, também estáticos.</li>
+    <li>Um método estático <ins>NUNCA</ins> usa o <q>this</q>, pois estes pertencem à classe e o this só se usa em objetos. Normalmente para acessar atributos e métodos estáticos dentro da classe usamos o nome da mesma diretamente (exceto o PHP que usa <code>self</code>).</li>
+    <li>Classes somente com métodos estáticos não usam construtores nem destrutores.</li>
+    <li>Um método estático não pode acessar atributos e métodos não estáticos, a menos que você crie um objeto primeiro, porque métodos estáticos pertencem à classe, e métodos não estáticos pertencem ao objeto.</li>
+</ul>
+
+<h3>Relacionamentos UML</h3>
+
+<p>Até agora, vimos os diagramas, mas como futuramente vamos ter que trabalhar com interfaces, heranças e agregações, veja as setinhas de relacionamento UML para todos esses casos:</p>
+
+<img src="imagens/relacionamentos-uml.png" alt="Relacionamentos UML" style="max-width: 400px"/>
+
+<p>No caso, a seta fica apontada para a interface ou para a classe mãe. Já o losango fica no lado da classe que agrega a outra (o todo), basicamente o contrário das setas. Em outras palavras, quem implementa ou herda aponta para quem é mais genérico, já quem tem o losango é o todo.</p>
+
+<h3>Abstração com Interfaces</h3>
+
+<p>Uma interface é como um contrato que diz quais métodos uma classe deve ter, mas sem dizer como eles funcionam. Ela não tem código dentro dos métodos, apenas a assinatura deles, sem bloco. Em resumo:</p>
+
+<ul>
+    <li>A interface diz o que deve existir.</li>
+    <li>As classes dizem como funciona.</li>
+</ul>
+
+<p>Interfaces garantem que diferentes classes tenham comportamentos em comum, mesmo sendo totalmente diferentes entre si.</p>
+
+<p>Lembrando que algumas linguagens POO não usam interfaces, como o Python e o C++, podemos simular uma com uma classe puramente abstrata/virtual pura, no entanto, isso não significa que elas são exatamente equivalentes.</p>
+
+<p>Lembrando que, assim como aconteciam com as classes, as interfaces devem ter a primeira maiúscula e as restantes minúsculas, com CamelCase permitido (como <code>FonteEnergia</code>, que exemplificaremos logo em seguida).</p>
+
+<p>Para uma classe implementar uma interface, usamos no Java a palavra <code>implements</code>. A classe que implementar essa interface é obrigada a criar os mesmos métodos.</p>
+
+<p>Veja um exemplo de interface:</p>
+
+<pre>
+<code>
+public interface FonteEnergia {
+    public void fornecerEnergia();
+    public void recarregar();
+}
+</code>
+</pre>
+
+<p>PS: Os métodos nem sempre precisam ser void, pode ser qualquer tipo (como <code>int</code>, <code>char</code> ou <code>boolean</code>), inclusive outras classes/interfaces. Também podem ter parâmetros normalmente. Como citado, ao exibir valores, prefira os retornar ao invés de usar métodos padrões de exibição (como o <code>System.out.println</code> do Java), usaremos aqui apenas por questões didáticas.</p>
+
+<p>E implementando essa interface, podemos ter várias classes cada uma implementando da sua forma:</p>
+
+<p>Classe 1:</p>
+
+<pre>
+<code>
+public class PilhaComum implements FonteEnergia {
+    @Override
+    public void fornecerEnergia() {
+        System.out.println("Pilha comum: Fornecendo energia por um curto período.");
+    }
+
+    @Override
+    public void recarregar() {
+        System.out.println("Pilha comum não pode ser recarregada!");
+    }
+}
+</code>
+</pre>
+
+<p>Classe 2:</p>
+
+<pre>
+<code>
+public class PilhaRecarregavel implements FonteEnergia {
+    @Override
+    public void fornecerEnergia() {
+        System.out.println("Pilha recarregável: Fornecendo energia de forma estável.");
+    }
+
+    @Override
+    public void recarregar() {
+        System.out.println("Pilha recarregável recebendo carga!");
+    }
+}
+</code>
+</pre>
+
+<p>Classe 3:</p>
+
+<pre>
+<code>
+public class BateriaLitio implements FonteEnergia {
+    @Override
+    public void fornecerEnergia() {
+        System.out.println("Bateria de lítio: Fornecendo energia de alta performance.");
+    }
+
+    @Override
+    public void recarregar() {
+        System.out.println("Bateria de lítio recebendo carga!");
+    }
+}
+</code>
+</pre>
+
+<p>PS: Note que o Java adiciona a notação <code>@Override</code> em métodos sobreescritos. Isso também é visto com métodos abstratos de classes abstratas (virtuais puras) e virtuais, que veremos mais pra frente. As interfaces também são parte da abstração. No PHP a notação <q>override</q> não existe, já no C# e C++ eles são usados em métodos abstratos e virtuais, de forma ligeiramente diferente, C# não utiliza essa anotação em métodos implementados de interfaces.</p>
+
+<p>Veja o diagrama dessa interface e dessas classes:</p>
+
+<img src="imagens/diagrama-interface.png" alt="Diagrama Interface" style="max-width: 600px"/>
+
+<p>E aí, no código principal:</p>
+
+<pre>
+<code>
+// Definindo três objetos do "tipo" da interface e a instância com as classes implementadoras da mesma.
+FonteEnergia p1 = new PilhaComum();
+FonteEnergia p2 = new PilhaRecarregavel();
+FonteEnergia p3 = new BateriaLitio();
+
+p1.fornecerEnergia(); // Métodos definidos na interface, sendo executado somente o que está em cada classe implementadora equivalente.
+p2.fornecerEnergia();
+p3.fornecerEnergia();
+
+p1.recarregar(); // Idem.
+p2.recarregar();
+p3.recarregar();
+</code>
+</pre>
+
+<p>Em resumo, a interface <code>FonteEnergia</code> diz apenas que algo deve fornecer energia, cada tipo de pilha/bateria fornece energia do seu jeito. Podemos trocar os objetos livremente e todos funcionam da mesma forma (fazendo parte também do polimorfismo, no caso, o polimorfismo de inclusão).</p>
+
+<p>Ao usar uma interface, só poderemos usar os métodos descritos nela, mesmo se a classe implementadora tiver outros métodos, eles não estarão acessíveis por não estarem na interface, o que garante também o encapsulamento.</p>
+
+<p>PS: Uma classe pode implementar mais de uma interface, nesse caso, separe elas por vírgulas, com algo como <code>public class NomeClasse implements NomeInterface1, NomeInterface2</code>, mas nesse caso deveremos iniciar o objeto com o nome da classe implementadora ao invés de uma das interfaces.</p>
+
+<ul>
+    <li><a href="poo-algoritmos-1.html">Parte Anterior da Matéria!</a></li>
+    <li><a href="poo-algoritmos-3.html">Continuação da Matéria!</a></li>
+</ul>
+
+        </div>
+    </body>
+</html>

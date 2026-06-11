@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Aprenda Python</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+    </head>
+    <body>
+        <div>
+            <header>
+                <h1>Aprenda Python</h1>
+                <menu>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="contato.html">Contato!</a></li>
+                    <li><a href="tudo-sobre-python-1.html">Tudo sobre Python Parte 1!</a></li>
+                    <li><a href="tudo-sobre-python-2.html">Tudo sobre Python Parte 2!</a></li>
+                    <li><a href="tudo-sobre-python-3.html">Tudo sobre Python Parte 3!</a></li>
+                    <li><a href="tudo-sobre-python-4.html">Tudo sobre Python Parte 4!</a></li>
+                    <li><a href="tudo-sobre-python-5.html">Tudo sobre Python Parte 5!</a></li>
+                    <li><a href="tudo-sobre-python-6.html">Tudo sobre Python Parte 6!</a></li>
+                    <li><a href="tudo-sobre-python-7.html">Tudo sobre Python Parte 7!</a></li>
+                    <li><a href="tudo-sobre-python-8.html">Tudo sobre Python Parte 8!</a></li>
+                </menu>
+            </header>
+
+<h2>Programção Orientada a Objetos em Python - Parte 2</h2>
+
+<h3>Herança em Python</h3>
+
+<p>A POO tem 4 pilares: Abstração, Encapsulamento, Herança e Polimorfismo. Agora veremos a herança.</p>
+
+<p>A herança é um relacionamento entre itens gerais (ancestrais) e tipo mais específicos (descendentes) desses itens, que herdam atributos e métodos dos níveis superiores.</p>
+
+<p>As principais vantagens da herança são essas:</p>
+
+<ul>
+    <li>Reutilização de código.</li>
+    <li>Organização hierárquica.</li>
+    <li>Facilita manutenção.</li>
+    <li>Extensibilidade.</li>
+    <li>Suporte a polimorfismo.</li>
+</ul>
+
+<p>Normalmente, quando falamos de herança, lembramos de casos como o de uma pessoa que faleceu e o filho herda tudo que ele tinha. Mas na programação, o sentido de herança é mais parecido com características que os filhos adquirem dos pais, como acontece com uma pessoa ou animal (tipo um filhote de passarinho, que tem características e comportamentos do pai e da mãe), mas os filhos também pode ter características próprias ou alteradas.</p>
+
+<p>A classe de <q>cima</q> (mais generalista) chamaremos de superclasse (ou classe base, ancestral ou classe mãe). A classe de <q>baixo</q> (mais específica), chamaremos de subclasse (ou classe derivada, descendente ou classe filha). Podemos também ter uma hierarquia de heranças. A herança é a generalização com a relação tipo <q>é um</q>.</p>
+
+<p>Vamos supor um exemplo com aluno, professor e funcionário, num sistema de cadastro pra controle de escola. Cada um tem suas características e comportamentos específicos, mas também tem coisas em comum, como nome e idade. Podemos criar uma classe mais generalizada com o nome pessoa com essas características em comum com todos os outros, que herdarão essas características em comum, e cada classe especializada pode adicionar outras características e comportamentos.</p>
+
+<p>Veja a classe Pessoa:</p>
+
+<pre>
+<code>
+class Pessoa:
+    def __init__(self, nome = "", idade = 0):
+        self.nome = nome
+        self.idade = idade
+
+    def fazerAniversario(self):
+        self.idade += 1
+</code>
+</pre>
+
+<p>Para fazer a herança, coloque após o nome da classe filha, entre parênteses, o nome da classe mãe, como vemos na classe Aluno:</p>
+
+<pre>
+<code>
+class Aluno(Pessoa):
+    def __init__(self, nome, idade, curso, turma):
+        super().__init__(nome, idade)
+        self.curso = curso
+        self.turma = turma
+
+    def fazerMatricula(self):
+        print(f"O aluno {self.nome} acabou de fazer matrícula!")
+</code>
+</pre>
+
+<p>Na classe Professor:</p>
+
+<pre>
+<code>
+class Professor(Pessoa):
+    def __init__(self, nome, idade, especialidade, nivel):
+        super().__init__(nome, idade)
+        self.especialidade = especialidade
+        self.nivel = nivel
+
+    def darAula(self):
+        print(f"Prof. {self.nome} começou a dar aula!")
+</code>
+</pre>
+
+<p>E na classe Funcionario:</p>
+
+<pre>
+<code>
+class Funcionario(Pessoa):
+    def __init__(self, nome, idade, cargo, setor):
+        super().__init__(nome, idade)
+        self.cargo = cargo
+        self.setor = setor
+
+    def baterPonto(self):
+        print(f"Prof. {self.nome} começou a dar aula!")
+</code>
+</pre>
+
+<p>PS: Lembre-se que, ao herdar uma superclasse, caso necessário, deveremos fazer a sobreposição do construtor com o <code>super()</code>, no caso ali, é <code>super().__init__(nome, idade)</code>. O super pode ser usado com qualquer método de uma superclasse.</p>
+
+<p>Vamos criar um objeto assim:</p>
+
+<pre>
+<code>
+a1 = Aluno("José", 17, "Informática", "T01")
+
+a1.fazerAniversario()
+a1.fazerMatricula()
+
+inspect(a1, methods = True) # Importe from rich import print, inspect
+</code>
+</pre>
+
+<p>Como vemos, a classe Aluno recebeu todas as características da classe Pessoa (nome, idade e o método fazerAniversario), mas também adicionou características próprias, da mesma forma acontece com Professor e Funcionario.</p>
+
+<p>Da mesma forma, faremos com Professor:</p>
+
+<pre>
+<code>
+p1 = Professor("Samuel", 37, "Biologia", "Mestre")
+
+p1.fazerAniversario()
+p1.darAula()
+
+inspect(p1, methods = True)
+</code>
+</pre>
+
+<p>E com funcionário:</p>
+
+<pre>
+<code>
+f1 = Funcionario("Cláudia", 27, "Secretária", "Secretaria")
+
+f1.fazerAniversario()
+f1.baterPonto()
+
+inspect(f1, methods = True)
+</code>
+</pre>
+
+<p>PS: Podemos colocar as classes em arquivos separados, inclusive, é o recomendado para melhor organização. Podemos colocar a classe num arquivo como Classes.py, e no código principal, onde criamos os objetos, basta colocar a importação assim:</p>
+
+<pre>
+<code>
+from Classes import Aluno, Professor, Funcionario
+</code>
+</pre>
+
+<p>Caso coloque cada classe num arquivo separado, não esqueça da importação da classe Pessoa nas outras classes pra herança funcionar.</p>
+
+<p>Para executar um arquivo no método principal, podemos salvar um arquivo com o nome __main__.py, e colocar o código assim:</p>
+
+<pre>
+<code>
+def main():
+    # Coloque o código principal aqui dentro, no caso, os objetos criados
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<h3>Abstração</h3>
+
+<p>A abstração é outro pilar importante da Programação Orientada a Objetos, junto com encapsulamento, herança e polimorfismo. Geralmente a abstração é o primeiro pilar. A abstração é a prática de ignorar o irrelevante e se focar estritamente no essencial.</p>
+
+<p>Vamos supor um controle remoto, o que precisamos saber pra usar um desses, é o que cada botão faz, como o de liga-desliga ou o de volume, no entanto, não precisamos saber do funcionamento interno de circuitos, sensores e alimentação, por exemplo. Ou seja, só precisamos saber do que ele faz, e não como ele faz. Isso é um exemplo de abstração. Outro exemplo é um carro, nós temos que saber como dirigir ele, mas não precisamos saber do funcionamento interno do motor, freios, etc. para usar ele. O mesmo vale pro próprio computador, que pra usar um não precisamos saber como funciona cada componente de hardware, basta sabemos o que temos que usar. As coisas descritas, como os botões do controle, o volante e os pedais que usamos pra dirigir um carro, ou o teclado e mouse do computador, seriam a interface pública que temos que interagir para usar os mesmos, sem se preocupar com o que acontece internamente, além de proteger os componentes internos da gente e vice-versa.</p>
+
+<p>As principais vantagens do uso da abstração são essas:</p>
+
+<ul>
+    <li>Maior legibidade.</li>
+    <li>Padronização.</li>
+    <li>Simplificação.</li>
+    <li>Segurança.</li>
+</ul>
+
+<p>Existe a abstração de dados, que acontece quando ignoramos informações desnecessárias para o escopo do projeto (como por exemplo, a classe Aluno, que herda de Pessoa, pra classificar um aluno não precisamos de dados como altura e peso, por exemplo, mesmo que uma pessoa tenha essas características). Existe também a abstração de processos, quando não precisamos saber como um método faz seu trabalho, apenas sabe que ele existe pela interface.</p>
+
+<p>Usando o exemplo do controle remoto, sabemos que existem vários tipos de controles remotos (como por exemplo, pra TVs), com quantidade variada de botões, mas algumas funcionalidades são básicas, como ligar e desligar aparelho, controlar o volume, mudar de canal, entre outros, e todos eles tem isso em comum. Mas controles de marcas e modelos diferentes vão implementar essas funcionalidades de formas diferentes para cada modelo de TV, por exemplo. Então podemos colocar funções abstratas para essas funcionalidades comuns, no caso, as funções abstratas não serão implementadas na classe mãe, e sim nas classes herdeiras da mesma, que cada um implementará da sua forma. Um controle remoto de outro aparelho, como de um ar-condicionado, já não poderá ter essa classe do controle como base, porque tem outros tipos de botões.</p>
+
+<p>Basicamente, os métodos abstratos são definidos na classe, que também é abstrata. As classes abstratas não podem virar objetos, apenas servirão de base para objetos criados por classes herdeiras, que obrigatoriamente terão que implementar todos os métodos abstratos, sem exceção.</p>
+
+<p>Vamos voltar ao exemplo das classes Pessoa e suas herdeiras, Aluno, Professor e Funcionario. Um método da classe Pessoa como o <code>fazerAniversario</code> pode já ser implementado na classe Pessoa porque ela funciona igual pra qualquer classe herdeira. A classe Pessoa no caso será abstrata e não gerará objeto, que serão criados com suas classes herdeiras. As classes que virarão objetos serão chamadas de classes especializadas, e são classes concretas. Podemos criar novas classes baseadas na abstrata Pessoa, como a Colaborador, e ela herdará tudo dela.</p>
+
+<p>No caso, da classe Pessoa, o método <code>fazerAniversario</code> é concreto (ou seja, implementado), mas ela pode ter um método abstrato, como o estudar, e toda classe herdeira obrigatoriamente terá que implementar esse método, e cada um (Aluno, Professor, etc.) estuda de uma forma diferente do outro.</p>
+
+<p>Em resumo, uma classe abstrata numa será instanciada, já que ela será usada apenas como base para as subclasses. Ao definir um conjunto de métodos abstratos, dizemos que estamos criando a interface pública da classe. Uma classe abstratas pode ter métodos abstratos que deverão ser obrigatoriamente implementados nas subclasses. Mas uma classe abstrata pode ter métodos concretos se eles funcionarem da mesma maneira para todas as subclasses (conhecido pela sigla <q>DRY</q>).</p>
+
+<p>Os métodos abstratos não tem corpo, sendo necessário ter um <code>pass</code> para indicar bloco vazio. Para definir uma classe abstrata, devemos importar a biblioteca ABC (Abstract Base Classes), já que a abstração não existe por padrão no Python.</p>
+
+<p>Vamos voltar às classes da aula anterior, vamos criar um objeto com a classe Pessoa, e ele deixará normalmente, assim:</p>
+
+<pre>
+<code>
+x = Pessoa("Gustavo", 48)
+
+x.fazerAniversario()
+
+inspect(x, methods = True)
+</code>
+</pre>
+
+<p>No caso, só poderemos usar os atributos e métodos que estão em Pessoa (como o método <code>fazerAniversario</code>), não poderemos usar métodos de subclasses como o de Aluno e de Professor).</p>
+
+<p>Para tornar a classe Pessoa abstrata, importamos a biblioteca ABC, e fazemos essa classe <q>herdar</q> da classe ABC, assim:</p>
+
+<pre>
+<code>
+from abc import ABC
+
+class Pessoa(ABC):
+    def __init__(self, nome = "", idade = 0):
+        self.nome = nome
+        self.idade = idade
+
+    def fazerAniversario(self):
+        self.idade += 1
+</code>
+</pre>
+
+<p>Dessa forma acima, a classe Pessoa não poderá mais ser usada pra criar objetos, apenas para servir de base pra criação de outras classes (no caso, a Aluno, Professor e Funcionario). Na verdade isso é mais uma sinalização de abstração, diferente de linguagens como o Java que dão erro a tentar instanciar uma classe abstrata.</p>
+
+<p>Quando tornamos uma classe abstrata, podemos definir métodos abstratos, nesse caso importaremos também o abstractmethod de abc, e criaremos o método <code>estudar</code> sem corpo e com essa sinalização, assim:</p>
+
+<pre>
+<code>
+from abc import ABC, abstractmethod
+
+class Pessoa(ABC):
+    def __init__(self, nome = "", idade = 0):
+        self.nome = nome
+        self.idade = idade
+
+    def fazerAniversario(self):
+        self.idade += 1
+        
+    @abstractmethod
+    def estudar(self):
+        pass
+</code>
+</pre>
+
+<p>Agora sim, pode dar erro ao tentar instanciar a classe Pessoa. E todas as classe herdeiras deverão obrigatoriamente implementar os métodos abstratos (no caso, a <code>estudar</code>).</p>
+
+<p>PS: Ao clicar ao lado de uma classe herdeira, podemos ir no Pycharm e pedir para ele implementar os métodos abstratos. E não esqueça de remover a tentativa de instanciar a classe Pessoa, pra não dar erros, que iremos inclusive corrigir agora.</p>
+
+<p>Na classe Aluno, implemente o método <code>estudar</code> assim:</p>
+
+<pre>
+<code>
+def estudar(self):
+    print(f"{self.nome} está estudando {self.curso} na turma {self.turma}.")
+</code>
+</pre>
+
+<p>Em Professor assim:</p>
+
+<pre>
+<code>
+def estudar(self):
+    print(f"{self.nome} é especialista em {self.especialidade} no nível {self.nivel}.")
+</code>
+</pre>
+
+<p>E em Funcionario assim:</p>
+
+<pre>
+<code>
+def estudar(self):
+    print(f"{self.nome} se especializa na área de {self.setor}.")
+</code>
+</pre>
+
+<p>Veja que cada classe implementou o método <code>estudar</code> de uma forma diferente, usando seus próprios atributos, além de um atributo em comum (nome).</p>
+
+<p>Podemos usar o método estudar dos três objetos assim:</p>
+
+<pre>
+<code>
+a1.estudar()
+p1.estudar()
+f1.estudar()
+</code>
+</pre>
+
+<h3>Encapsulamento: Público, Protegido e Privado</h3>
+
+<p>Vamos supor que temos um botão que, por exemplo, dispara um foguete, supondo que ela esteja autorizado a usar o mesmo. Ela não precisa saber todo o mecanismo que faz com que o foguete seja lançado (como os circuitos e a lógica dos mesmos), ela apenas sabe que ao apertar o botão, o foguete será lançado. Isso seria o encapsulamento, que seria não deixar exposto partes de alguma coisa sem necessidade, deixando público apenas o que é necessário.</p>
+
+<p>Em outras palavras, o encapsulameto visa manter a integridade do sistema, protegendo o estado do interno do objeto contra inteferência externa não regulamentada.</p>
+
+<p>Outro exemplo é o do controle remoto, que o fabricante, para proteger os circuitos internos do mesmo e impedir que encostemos em partes que não devem, então ele é colocado numa <q>cápsula</q> que deixa exposto apenas a parte que devemos acessar, como os botões. Outro bom exemplo é justamente de uma cápsula gelatinosa de remédios, que isola a quantidade exata de remédio que devemos usar, impede a ação de fatores externos como umidade e luz, e protege o paciente do gosto ruim e da toxicidade direta, que é dissolvida no estômago do paciente.</p>
+
+<p>As principais vantagens do encapsulamento são:</p>
+
+<ul>
+    <li>Segurança e controle.</li>
+    <li>Facilidade de manutenção.</li>
+    <li>Flexibilidade e reutilização.</li>
+    <li>Redução de efeitos colaterais.</li>
+</ul>
+
+<p>Trazendo pra área de TI, o encapsulamento pode ser usado, por exemplo, numa conta bancária, onde o cliente do banco não pode acessar diretamente o cofre do banco pra pegar os 500 Reais, pois tem o risco de pegar mais dinheiro que o devido, além de dificultar o controle de quem pega o dinheiro e tudo mais. É pra isso que o encapsulamento existe.</p>
+
+<p>Voltando ao código da ContaBancaria, lembrando que deixamos o código anterior assim:</p>
+
+<pre>
+<code>
+from rich import print
+from rich import inspect
+
+class ContaBancaria:
+    """
+    Cria uma conta bancária e permite fazer saques e depósitos
+    """
+
+    # Construtor
+    def __init__(self, id, nome, saldo = 0): # Apenas saldo é opcional, os outros são obrigatórios
+        self.id = id
+        self.titular = nome
+        self.saldo = saldo
+        print(f"Conta {self.id} criada com sucesso. Saldo atual de R${saldo:.2f}.")
+
+    # Métodos de Instância:
+    def depositar(self, valor):
+        self.saldo += valor
+        print(f"Depósito de R${valor:.2f} autorizado na conta {self.id}.")
+
+    def sacar(self, valor):
+        if valor > self.saldo:
+            print(f"Saque de R${valor:.2f} negado na conta {self.id}. Saldo insuficiente.")
+        else:
+            self.saldo -= valor
+            print(f"Saque de R${valor:.2f} autorizado na conta {self.id}.")
+
+    # Métodos Sobrescritos:
+    def __str__(self):
+        return f"A conta {self.id} de {self.titular} tem R${self.saldo:.2f} de saldo."
+</code>
+</pre>
+
+<p>Com esse código principal:</p>
+
+<pre>
+<code>
+def main():
+    c1 = ContaBancaria(111, "Maria", 5000)
+
+    c1.depositar(500)
+    print(c1)
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<p>No caso acima, nenhum atributo ou método está protegido nem público. Vamos ver por exemplo assim, no método __str__ (que exibe os dados ao chamar o objeto no print):</p>
+
+<pre>
+<code>
+def __str__(self):
+    # return f"A conta {self.id} de {self.titular} tem R${self.saldo:.2f} de saldo."
+    return f"Estado atual da conta: {self.__dict__}"
+</code>
+</pre>
+
+<p>Deixe o código principal assim:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(111, "Maria", 5000)
+
+c1.depositar(500)
+c1.sacar(100)
+
+print(c1)
+</code>
+</pre>
+
+<p>Mas, como o código não está encapsulado, podemos causar problemas como, por exemplo, um depósito ou saque com número negativo (o que vai inverter o que os métodos fazem), assim:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(111, "Maria", 5000)
+
+# Nada disso abaixo deveria ser permitido:
+c1.depositar(-500)
+c1.sacar(-100)
+c1.saldo = 0
+
+print(c1)
+</code>
+</pre>
+
+<p>Aí, além de problemas nos métodos de depósito e saque, ainda nós pudermos atribuir o saldo a zero. Nada disso deveria ser permitido, mas como nada disso está encapsulado, o programa acabou permitindo coisas que não deveriam. Seria como você estar na frente do cofre do banco aberto, sem nenhum impedimento de mexer no dinheiro e nas contas de qualquer um ali.</p>
+
+<p>Para realizar essa proteção, precisamos entender:</p>
+
+<ul>
+    <li>Visibilidade dos atributos.</li>
+    <li>Acesso aos dados protegidos.</li>
+</ul>
+
+<p>Existem, basicamente, três tipos de visibilidade para atributos em linguagens POO:</p>
+
+<ul>
+    <li>Público (public, representado por <q>+</q>).</li>
+    <li>Protegido (protected, representado por <q>#</q>).</li>
+    <li>Privado (private, representado por <q>-</q>).</li>
+</ul>
+
+<p>Na herança, as classes filhas herdam todas as características da classe mãe, incluindo os atributos e sua visibilidade. Vamos supor uma classe A com um atributo público, um protegido e um privado. O atributo público é acessado por qualquer parte do programa. O atributo protegido é disponível apenas pra classe atual e suas subclasses. O atributo privado é disponível apenas na classe a qual ela pertence e mais nenhuma.</p>
+
+<p>No entanto, essas características de orientação a objetos é mais rígida em outras linguagens, como o Java, PHP, C++ e C#. No Python a visibilidade é mais uma convenção do que uma regra, que indicam que os métodos e atributos devem ser protegidos ou privados, mas na prática, nada é impedido ao mexer em algum deles, mesmo que na teoria não fosse permitido (seria como poder jogar água num aparelho eletrônico, que é possível fazer, mas não deve ser feito). A <q>indicação</q> de atributos públicos, protegido e privados são feitas com underlines, assim:</p>
+
+<pre>
+<code>
+atrib1 # Público
+_atrib2 # "Protegido"
+__atrib3 # "Privado"
+</code>
+</pre>
+
+<p>PS: O atributo com duas underlines se chama <q>name mangling</q> (mutilação de nome), que é pra evitar repetição de nomes de atributos dentro de classes, mas isso não torna ele <q>privado</q> de verdade.</p>
+
+<p>Vamos renomear os atributos no construtor assim:</p>
+
+<pre>
+<code>
+# Construtor
+def __init__(self, id, nome, saldo = 0): # Apenas saldo é opcional, os outros são obrigatórios
+    self.id = id # Público
+    self._titular = nome # Protegido
+    self.__saldo = saldo # Privado
+    print(f"Conta {self.id} criada com sucesso. Saldo atual de R${saldo:.2f}.")
+</code>
+</pre>
+
+<p>PS: Use a refatoração da IDE pra isso. No PyCharm é só clicar no atributo, em Refactor, Rename e colocar as underlines nos atributos que ele atualizará todas as ocorrências, que pode ser num projeto inteiro ou apenas no arquivo atual.</p>
+
+<p>Aí no código principal, execute assim:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(111, "Maria", 5000)
+
+c1.depositar(-500)
+c1.sacar(-100)
+c1.saldo = 0
+
+print(c1)
+</code>
+</pre>
+
+<p>No caso acima, o saldo não será alterado, já que o atributo saldo ali em cima não terá vínculo com o saldo <q>privado</q> da classe, que permanecerá inalterado.</p>
+
+<p>PS: Para resolver o depósito e o saque negativo, podemos até usar um condicional que verifique se o valor é menor que zero, mas podemos também fazer com que o valor seja sempre positivo, usando a função abs (que retira o sinal negativo de um número), assim:</p>
+
+<pre>
+<code>
+def depositar(self, valor):
+    valor = abs(valor)
+    self.__saldo += valor
+    print(f"Depósito de R${valor:.2f} autorizado na conta {self.id}.")
+
+def sacar(self, valor):
+    valor = abs(valor)
+    if valor > self.__saldo:
+        print(f"Saque de R${valor:.2f} negado na conta {self.id}. Saldo insuficiente.")
+    else:
+        self.__saldo -= valor
+        print(f"Saque de R${valor:.2f} autorizado na conta {self.id}.")
+</code>
+</pre>
+
+<p>Deixe o código assim:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(111, "Maria", 5000)
+
+c1.depositar(-500)
+c1.sacar(-100)
+
+print(c1)
+</code>
+</pre>
+
+<p>E depois assim:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(111, "Maria", 5000)
+
+c1.depositar(-500)
+c1.sacar(-100)
+c1.titular = "Sérgio"
+
+print(c1)
+</code>
+</pre>
+
+<p>Da mesma forma, o atributo titular acima não interferirá no atributo protegido titular da classe, que permanecerá inalterado, assim como aconteceu com o saldo, no entanto, se colocarmos a underline deles, dessa forma aqui, ele alterará os atributos da classe diretamente:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(111, "Maria", 5000)
+
+c1._titular = "Sérgio"
+c1.__saldo = 0
+
+print(c1)
+</code>
+</pre>
+
+<p>No entanto, isso não acontece ao usar com o saldo, pois ele diferencia o atributo <code>__saldo</code> da classe do que está no código principal (isso é o name mangling), mas não impede a manipulação totalmente, pois poderíamos usar algo assim:</p>
+
+<pre>
+<code>
+c1 = ContaBancaria(111, "Maria", 5000)
+
+c1._titular = "Sérgio"
+c1._ContaBancaria__saldo = 0
+
+print(c1)
+</code>
+</pre>
+
+<p>Isso pode até ser usado por exemplo, numa depuração, mas seguindo as regras de convenção do Python, não deve ser usado.</p>
+
+<ul>
+    <li><a href="poo-em-python-1.html">Parte Anterior da Matéria!</a></li>
+    <li><a href="poo-em-python-3.html">Continuação da Matéria!</a></li>
+</ul>
+
+        </div>
+    </body>
+</html>

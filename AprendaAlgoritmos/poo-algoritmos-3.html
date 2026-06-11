@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="icon" href="imagens/favicon.ico"/>
+        <title>Aprenda Algoritmos</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
+    </head>
+    <body>
+        <div>
+            <header>
+                <h1>Aprenda Algoritmos</h1>
+                <menu>
+                    <li><a href="index.html">Página Inicial</a></li>
+                    <li><a href="contato.html">Contato!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-1.html">Tudo sobre Algoritmos Parte 1!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-2.html">Tudo sobre Algoritmos Parte 2!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-3.html">Tudo sobre Algoritmos Parte 3!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-4.html">Tudo sobre Algoritmos Parte 4!</a></li>
+                    <li><a href="tudo-sobre-algoritmos-5.html">Tudo sobre Algoritmos Parte 5!</a></li>
+                </menu>
+            </header>
+
+<h2>Orientação a Objetos - Parte 3</h2>
+
+<h3>Agregação de Objetos</h3>
+
+<p>Agregação é um tipo de relacionamento entre classes onde um objeto é formado por outros objetos, mas esses objetos podem existir separadamente.Ou seja: A classe <q>dona</q> usa outros objetos, mas não é dona deles.</p>
+
+<p>PS: Não confunda agregação com herança, são conceitos diferentes.</p>
+
+<p>Veja um exemplo de agregação abaixo, com a classe Mouse:</p>
+
+<pre>
+<code>
+public class Mouse {
+    private String tipo;
+    private boolean semFio;
+
+    public Mouse(String tipo, boolean semFio) {
+        this.tipo = tipo;
+        this.semFio = semFio;
+    }
+
+    public String getTipo() {
+        return this.tipo;
+    }
+
+    public boolean getSemFio() {
+        return this.semFio;
+    }
+}
+</code>
+</pre>
+
+<p>E a classe Computador que a agrega:</p>
+
+<pre>
+<code>
+public class Computador {
+    private String marca;
+    private int gb;
+    private Mouse ms; // Agregação: Computador usa um mouse externo, o "tipo" é a classe Mouse.
+
+    public Computador(String marca, int gb) {
+        this.marca = marca;
+        this.gb = gb;
+    }
+
+    // Passando objeto criado como parâmetro
+    public void conectarMouse(Mouse ms) {
+        this.ms = ms;
+    }
+
+    public void exibirInfo() {
+        System.out.println("Marca do computador: " + this.marca);
+        System.out.println("Capacidade em GB: " + this.gb);
+
+        if(ms != null) {
+            System.out.println("Mouse conectado: " + ms.getTipo());
+            System.out.println("O mouse é sem fio? " + ms.getSemFio());
+        }
+        else {
+            System.out.println("Nenhum mouse conectado.");
+        }
+    }
+}
+</code>
+</pre>
+
+<p>Diagrama das duas classes:</p>
+
+<img src="imagens/diagrama-agregacao.png" alt="Diagrama Agregação" style="max-width: 600px"/>
+
+<p>E no código principal:</p>
+
+<pre>
+<code>
+// O mouse existe sozinho.
+Mouse mou = new Mouse("Óptico", false);
+
+// O computador também existe sozinho.
+Computador pc = new Computador("Dell", 1);
+
+// O computador apenas usa (agrega) o mouse
+pc.conectarMouse(mou);
+
+pc.exibirInfo();
+</code>
+</pre>
+
+<p>Um computador pode usar um mouse, mas o mouse existe sozinho e não depende do computador para existir. No entanto, podemos fazer com que ele receba um objeto agregado no construtor também (no caso, exigindo que o computador tenha o mouse), alterando a classe Computador assim:</p>
+
+<pre>
+<code>
+public class Computador {
+    private String marca;
+    private int gb;
+    private Mouse ms; // Agregação: Computador usa um mouse externo, o "tipo" é o objeto Mouse.
+
+    public Computador(String marca, int gb, Mouse ms) { // Aí elimina o método conectaMouse.
+        this.marca = marca;
+        this.gb = gb;
+        this.ms = ms;
+    }
+
+    public void exibirInfo() {
+        System.out.println("Marca do computador: " + this.marca);
+        System.out.println("Capacidade em GB: " + this.gb);
+
+        if(ms != null) {
+            System.out.println("Mouse conectado: " + ms.getTipo());
+            System.out.println("O mouse é sem fio? " + ms.getSemFio());
+        }
+        else {
+            System.out.println("Nenhum mouse conectado.");
+        }
+    }
+}
+</code>
+</pre>
+
+<p>E no código principal deixe assim:</p>
+
+<pre>
+<code>
+// O mouse existe sozinho.
+Mouse mou = new Mouse("Óptico", false);
+
+// O computador depende do mouse, nesse caso.
+Computador pc = new Computador("Dell", 1, mou);
+
+pc.exibirInfo();
+</code>
+</pre>
+
+<p>PS: No lugar da classe agregada (no caso, Mouse) também pode estar uma interface, usando a mesma lógica. Lembrando que, caso o Mouse fosse iniciado com new dentro da classe Computador, seria composição, e não agregação, representado com o losango preto. Por exemplo:</p>
+
+<pre>
+<code>
+private Mouse ms = new Mouse("Óptico", false);
+</code>
+</pre>
+
+<p>Resumindo: Objeto criado fora da classe é agregação, objeto criado dentro da classe é composição.</p>
+
+<p>PS: Em linguagens com destrutores, como o C++, deveremos destruir o objeto agregado ou composto dentro do destrutor, como por exemplo:</p>
+
+<pre>
+<code>
+Computador::~Computador() {
+    cout &lt;&lt; "Computador Destruído: " &lt;&lt; this-&gt;marca &lt;&lt; endl;
+
+    delete this->ms; // Destruindo objeto Mouse
+}
+</code>
+</pre>
+
+<h3>Herança</h3>
+
+<p>Herança é um mecanismo da POO onde uma classe herda características de outra classe. A classe <q>filha</q> reaproveita atributos e métodos da classe <q>mãe</q>, podendo também adicionar novos comportamentos ou modificar os existentes. Serve para evitar repetição de código e para organizar as classes de forma mais lógica.</p>
+
+<p>Exemplo, classe Animal (mãe):</p>
+
+<pre>
+<code>
+public class Animal {
+    protected String nome;
+
+    public void dormir() {
+        System.out.println(this.nome + " está dormindo...");
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+}
+</code>
+</pre>
+
+<p>PS: Note que usamos o atributo como <q>protegido</q> dessa vez, o que permite que ele só seja manipulado na própria classe e em suas descendentes. Se colocar como <q>privado</q> as classes filhas não poderão acessá-lo diretamente.</p>
+
+<p>Para uma classe herdar características de outra, usamos no Java a palavra <code>extends</code>.</p>
+
+<p>Classe Cachorro (filha):</p>
+
+<pre>
+<code>
+public class Cachorro extends Animal {
+    // Método adicionado somente em Cachorro.
+    public void latir() {
+        System.out.println(this.getNome() + " está latindo!");
+    }
+}
+</code>
+</pre>
+
+<p>Classe Gato (outra filha):</p>
+
+<pre>
+<code>
+public class Gato extends Animal {
+    // Método adicionado somente em Gato.
+    public void miar() {
+        System.out.println(this.getNome() + " está miando!");
+    }
+}
+</code>
+</pre>
+
+<p>No caso acima, é encorajado usarmos o método getter, mas o atributo <q>nome</q> está acessível nas classes filhas por estar como <q>protegido</q>, e não <q>privado</q>.</p>
+
+<p>E no código principal:</p>
+
+<pre>
+<code>
+Cachorro cao = new Cachorro();
+
+cao.setNome("Rex");
+cao.dormir(); // Herdado da classe Animal.
+cao.latir(); // Próprio de Cachorro.
+
+Gato gat = new Gato();
+
+gat.setNome("Frajola");
+gat.dormir(); // Herdado.
+gat.miar(); // Próprio de Gato.
+</code>
+</pre>
+
+<p>Lembrando do caso das interfaces, poderíamos até declarar os dois objetos acima como do tipo <q>Animal</q>, mas nesse caso só poderia ser usado os métodos descritos nesta classe (no caso, o <q>dormir</q>), já os métodos <q>latir</q> e <q>miar</q> não poderiam ser usados.</p>
+
+<p>Veja os diagramas dessas classes:</p>
+
+<img src="imagens/diagrama-heranca.png" alt="Diagrama Herança" style="max-width: 600px"/>
+
+<p>Para trabalhar com construtores em heranças, temos métodos especiais para isso. No caso do Java, é o <code>super()</code>, mas outras linguagens podem ter outros nomes (no PHP é o <code>parent::__construct()</code>, no C# é o <code>base()</code>, C++ e outras linguagens chamam a classe mãe diretamente, como <code>Animal()</code>). Nem sempre é necessário chamar o construtor da classe mãe, mas muitas vezes precisaremos fazer isso.</p>
+
+<p>Independente do nome, esses métodos são usados para:</p>
+
+<ul>
+    <li>Acessar métodos da classe mãe.</li>
+    <li>Acessar atributos da classe mãe.</li>
+    <li>Chamar o construtor da classe mãe (mesmo se for vazio, em alguns casos).</li>
+</ul>
+
+<p>Veja a classe Animal alterada:</p>
+
+<pre>
+<code>
+public class Animal {
+    protected String nome;
+
+    public void dormir() {
+        System.out.println(this.nome + " está dormindo...");
+    }
+
+    public Animal(String nome) {
+        this.nome = nome;
+        System.out.println("Animal criado: " + this.nome); // Não é recomendado usar comandos de saída no construtor, apenas está como exemplo.
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+}
+</code>
+</pre>
+
+<p>Classe Cachorro:</p>
+
+<pre>
+<code>
+public class Cachorro extends Animal {
+    public void latir() {
+        System.out.println(this.getNome() + " está latindo!");
+    }
+
+    public Cachorro(String nome) {
+        super(nome); // chama o construtor da classe Animal
+        System.out.println("Cachorro criado: " + this.getNome());
+    }
+}
+</code>
+</pre>
+
+<p>Classe Gato:</p>
+
+<pre>
+<code>
+public class Gato extends Animal {
+    public void miar() {
+        System.out.println(this.getNome() + " está miando!");
+    }
+
+    public Gato(String nome) {
+        super(nome); // chama o construtor da classe Animal
+        System.out.println("Gato criado: " + this.getNome());
+    }
+}
+</code>
+</pre>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+Cachorro cao = new Cachorro("Rex");
+
+cao.dormir(); // Herdado da classe Animal.
+cao.latir(); // Próprio de Cachorro.
+
+Gato gat = new Gato("Frajola");
+
+gat.dormir(); // Herdado.
+gat.miar(); // Próprio de Gato.
+</code>
+</pre>
+
+<p>Nas classes herdeiras, podemos não só chamar o método construtor, mas qualquer outro método das classes ascendentes, no caso do Java é na sintaxe <code>super.nomeDoMetodo()</code>, desde que sejam públicos ou protegidos.</p>
+
+<p>Podemos ter uma hierarquia de heranças, onde as classes mais altas na hierarquia são mais gerais, e as classes mais baixas são mais específicas. Por exemplo: a classe Animal pode ser herdada por Mamifero, que pode ser herdada por Felino, que por sua vez pode ser herdada por Gato.</p>
+
+<p>Algumas linguagens, como o C++, permitem herança múltipla, quando uma classe herda de mais de uma classe ao mesmo tempo (na sintaxe <code>class ClasseHerdeira : public ClasseMae1, ClasseMae2</code>), mas como isso é mais sujeito a erros de implementação, muitas linguagens, como o C#, PHP e Java, não permitem isso, tendo que herdar somente de uma classe por vez (o que pode ter é a hierarquia de classes, mas somente uma herança por vez, no entanto, estas linguagens permitem implementar várias interfaces, como por exemplo em Java, <code>public class ClasseHerdeira extends ClasseMae implements NomeInterface1, NomeInterface2</code>.</p>
+
+<p>Interfaces também podem herdar características de outras interfaces, usando a mesma lógica, no Java seria algo como <code>public interface InterfaceHerdeira extends InterfaceMae</code>. Nesse caso podemos ter mais de uma herança numa mesma interface.</p>
+
+<h3>Polimorfismo de Sobreposição e de Inclusão</h3>
+
+<p>Polimorfismo de sobreposição acontece quando uma classe filha substitui (redefine) um método que veio da classe mãe, mudando o comportamento dele. O nome do método é o mesmo, mas o comportamento é diferente dependendo do objeto.</p>
+
+<p>Exemplo de classe mãe:</p>
+
+<pre>
+<code>
+public class Alimento {
+    public void consumir() {
+        System.out.println("Consumindo alimento...");
+    }
+}
+</code>
+</pre>
+
+<p>PS: Em C# e C++ precisa colocar o método como virtual para ele poder ser sobreposto. Isso explicaremos logo abaixo o que é. No Java, PHP e outras linguagens não se coloca esse indicador.</p>
+
+<p>Classe filha 1:</p>
+
+<pre>
+<code>
+public class Fruta extends Alimento {
+    @Override
+    public void consumir() {
+        super.consumir(); // Chamando método da classe mãe.
+        System.out.println("Comendo uma fruta fresca.");
+    }
+}
+</code>
+</pre>
+
+<p>Classe filha 2:</p>
+
+<pre>
+<code>
+public class Verdura extends Alimento {
+    @Override
+    public void consumir() {
+        super.consumir(); // Chamando método da classe mãe.
+        System.out.println("Comendo uma verdura saudável.");
+    }
+}
+</code>
+</pre>
+
+<p>Para trabalhar com métodos de classes mães em heranças, temos métodos especiais para isso. Da mesma forma que usamos nos construtores, podemos usar o super como citado acima no Java (no caso ficou <code>super.consumir()</code>, no PHP ficaria algo como <code>parent::consumir()</code>, e no C# <code>base.consumir()</code>, C++ e outras linguagens chamam a classe mãe diretamente (como <code>Alimento::consumir()</code>). Não é obrigatório o uso deles, na maioria dos casos.</p>
+
+<p>Como acontecia com as interfaces em Java, devemos colocar a notação <code>@Override</code> em métodos sobrepostos de outras classes.</p>
+
+<p>No C# não colocávamos <code>override</code> nos métodos sobrescritos da interface, mas no caso de métodos virtuais ou abstratos de classes é necessário.</p>
+
+<p>Veja o diagrama das classes acima:</p>
+
+<img src="imagens/diagrama-sobreposicao.png" alt="Diagrama Sobreposição" style="max-width: 600px"/>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+Alimento a1 = new Fruta();
+Alimento a2 = new Verdura();
+
+a1.consumir();  // chama o método da classe Fruta.
+a2.consumir();  // chama o método da classe Verdura.
+</code>
+</pre>
+
+<p>PS: Lembrando que, assim como acontecia com as interfaces, poderemos usar apenas métodos definidos na classe mãe, no caso, a Alimento.</p>
+
+<p>O fato de usar uma classe base na <q>tipagem</q> e depois criar o objeto com uma classe que herda a mesma, como ocorrido com Alimento e suas classes descendentes, é o polimorfismo de inclusão. Esse tipo de polimorfismo também acontece quando fazemos o mesmo com interfaces.</p>
+
+<p>Por padrão, no Java, assim como no PHP, todo método pode ser sobreposto, no caso da classe acima, para bloquear a sobreposição de um método, devemos colocar o <code>final</code> no método, de forma semelhante com as constantes. Na classe Alimento ficaria assim:</p>
+
+<pre>
+<code>
+public class Alimento {
+    public final void consumir() {
+        System.out.println("Consumindo alimento...");
+    }
+}
+</code>
+</pre>
+
+<p>Aí deveremos só implementar assim:</p>
+
+<pre>
+<code>
+Alimento a1 = new Alimento();
+
+a1.consumir();
+</code>
+</pre>
+
+<p>Já no caso do C# e do C++, nenhum método pode ser sobreposto por padrão. Aí nesse caso deveremos colocar o <code>virtual</code> nos métodos que queremos sobrepôr, como nesse exemplo em C#:</p>
+
+<pre>
+<code>
+class Alimento {
+    public virtual void consumir() {
+        Console.WriteLine("Consumindo alimento...");
+    }
+}
+</code>
+</pre>
+
+<p>E no método que o sobrescrever na classe filha, colocamos <code>override</code> no C# e C++, assim como no Java, na sintaxe <code>public override void consumir()</code> (em C#) e o bloco de implementação do mesmo.</p>
+
+<p>No caso do C#, podemos fazer com que um atributo ou método não seja sobrescrito com o <code>sealed</code> também.</p>
+
+<p>No caso do polimorfismo de sobreposição, o método tem a mesma assinatura em classes diferentes.</p>
+
+<ul>
+    <li><a href="poo-algoritmos-2.html">Parte Anterior da Matéria!</a></li>
+    <li><a href="poo-algoritmos-4.html">Continuação da Matéria!</a></li>
+</ul>
+
+        </div>
+    </body>
+</html>

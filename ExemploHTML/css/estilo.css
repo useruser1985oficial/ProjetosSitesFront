@@ -1,0 +1,29 @@
+@charset "UTF-8"; /* Coloque apenas em arquivos CSS separados, para compatibilidade de acentuação. */
+@import "folha.css";
+
+body {
+    background-color: gray;
+    background-image: url("../imagens/fundo.png") !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-attachment: fixed;
+}
+
+main {
+    background-color: rgba(0, 0, 64, 0.95) !important;
+    color: white !important;
+    padding: 20px;
+    font-family: Arial, sans-serif !important;
+    border-radius: 25px;
+}
+
+a {
+    color: cyan;
+    text-decoration: none;
+}
+
+a:hover {
+    color: lightcyan;
+    text-decoration: underline;
+}
