@@ -447,31 +447,31 @@ sudo sh -c 'echo 3>/proc/sys/vm/drop_caches'
     <li><b>/cdrom</b>: Ponto de montagem para CD-Rom (mas o padrão é o /media).</li>
     <li><b>/dev</b>: Arquivos de dispositivos.</li>
     <li><b>/etc</b>: Arquivos de configuração, tipo o "registro" do Linux (veja mais clicando <a href="http://www.uniriotec.br/~morganna/guia/dir_etc.html" target="_blank">aqui</a>).</li>
-    <li><b>/home</b>: Referente à usuários do sistema.</li>
+    <li><b>/home</b>: Referente a usuários do sistema.</li>
     <li><b>/lib</b>: Bibliotecas essenciais partilhadas.</li>
     <li><b>/lost</b>: Arquivos recuperados.</li>
-    <li><b>/media</b>: Diretórios que montam CDs, DVDs, partições e pen-drives inseridos.</li>
+    <li><b>/media</b>: Diretório que monta CDs, DVDs, partições e pendrives inseridos.</li>
     <li><b>/mnt</b>: Montagem de sistemas temporários.</li>
     <li><b>/opt</b>: Pacotes opcionais (geralmente usado para instalar programas, principalmente tarballs).</li>
     <li><b>/proc</b>: Onde encontra-se o kernel e arquivos de processo.</li>
     <li><b>/root</b>: O "home" do superusuário root.</li>
     <li><b>/run</b>: Arquivos temporários de aplicativos.</li>
     <li><b>/sbin</b>: Arquivos binários de administração.</li>
-    <li><b>/srv</b>: Serviçoes de dados (como o de um servidor, onde ficam os arquivos).</li>
+    <li><b>/srv</b>: Serviços de dados (como o de um servidor, onde ficam os arquivos).</li>
     <li><b>/tmp</b>: Arquivos temporários, apagados em todo boot.</li>
     <li><b>/usr</b>: Contém aplicativos usados pelos usuários, e não pelo sistema.</li>
-    <li><b>/var</b>: Arquivos de dados variáveis, é como o usr, mas com permissão de escrita para arquivos.</li>
+    <li><b>/var</b>: Arquivos de dados variáveis, é como o /usr, mas com permissão de escrita para arquivos.</li>
 </ul>
 
 <p>PS: Os diretórios são reconhecidos como arquivos no Linux.</p>
 
-<p>O Android (que também usa Kernel Linux) também possui a maioria desses diretórios (exceto /boot, /cdrom, /home, /mnt, /opt, /run, /srv, /usr e /var) não acessíveis em sistemas sem root, e tem outras pastas como a <b>/cache</b> (armazenamento de dados pra execução), <b>/data</b> (dados), <b>/init</b> (inicialização), <b>/sdcard</b> (cartão SD), <b>/storage</b> (área de armazenamento) e <b>/system</b> (sistema).</p>
+<p>O Android (que também usa Kernel Linux) também possui a maioria desses diretórios (exceto /boot, /cdrom, /home, /mnt, /opt, /run, /srv, /usr e /var) não acessíveis em sistemas sem root, e tem outros diretórios como <b>/cache</b> (armazenamento de dados pra execução), <b>/data</b> (dados), <b>/init</b> (inicialização), <b>/sdcard</b> (cartão SD), <b>/storage</b> (área de armazenamento) e <b>/system</b> (sistema).</p>
 
-<p>PS: A pasta <code>/opt</code>: Pode ser usado para instalar arquivos de downloads.</p>
+<p>PS: O diretório <code>/opt</code> pode ser usado para instalar arquivos de downloads.</p>
 
-<p>Para mover entre pastas usamos <code>cd</code> (igual no DOS), para exibir conteúdo do diretório <code>ls</code>.</p>
+<p>Para mover entre diretórios usamos <code>cd</code>, para exibir o conteúdo do diretório usamos <code>ls</code>.</p>
 
-<p>O arquivo <code>~/.bashrc</code> é onde está o path do usuário, onde podemos adicionar variáveis de ambiente colocando <code>export PATH=$PATH:/caminhododiretorios/</code>, e em <code>/etc/bash.bashrc</code> podemos colocar outras variáveis de ambiente, na sintaxe <code>NOMEDAVARIAVEL=conteudo</code>. Podemos também colocar outros diretórios no path de forma global no arquivo <code>/etc/environment</code>, separado por dois pontos (como <code>:/caminhododiretorio</code>).</p>
+<p>O arquivo <code>~/.bashrc</code> é onde está o path do usuário, onde podemos adicionar variáveis de ambiente colocando <code>export PATH=$PATH:/caminhododiretorio/</code>, e em <code>/etc/bash.bashrc</code> podemos colocar outras variáveis de ambiente, na sintaxe <code>NOMEDAVARIAVEL=conteudo</code>. Podemos também colocar outros diretórios no path de forma global no arquivo <code>/etc/environment</code>, separado por dois pontos (como <code>:/caminhododiretorio</code>).</p>
 
 <p>PS: Evite colocar caminhos com espaços.</p>
 

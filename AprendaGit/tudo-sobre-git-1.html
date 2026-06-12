@@ -138,19 +138,19 @@ git config --global init.defaultbranch
 
 <p>Para adicionar o arquivo pra ser rastreado pelo Git, digite <code>git add index.html</code>.</p>
 
-<p>Para remover um arquivo do rastreamento do Git, digite <code>git rm --cached index.html</code>. Pode ser necessário especificar <code>-rf</code> para excluir diretórios. Para restaurar o arquivo à área de staging após removê-lo do rastreamento digite <code>git restore --staged index.html</code>.</p>
+<p>Para remover um arquivo do rastreamento do Git, digite <code>git rm --cached index.html</code>. Pode ser necessário especificar <code>-rf</code> para excluir diretórios. Para restaurar o arquivo à área de staging após removê-lo do rastreamento, digite <code>git restore --staged index.html</code>.</p>
 
 <p>Podemos também mover e renomear arquivos dentro do repositório, usando algo como <code>git mv index.html main.html</code> ou <code>git mv *.css css/</code>.</p>
 
-<p>No Projeto-2, inicie o Git com <code>git init</code> e crie mais arquivos, como o index.html e um de estilo.css, que pode estar numa pasta. Nesse caso, para adicionar todos os arquivos do diretório apenas com <code>git add .</code> (sem esquecer do ponto), para remover, podemos usar <code>git rm --cached *</code>.</p>
+<p>No Projeto-2, inicie o Git com <code>git init</code> e crie mais arquivos, como o index.html e um de estilo.css, que pode estar numa pasta. Nesse caso, para adicionar todos os arquivos do diretório, é apenas com <code>git add .</code> (sem esquecer do ponto), para remover, podemos usar <code>git rm --cached *</code>.</p>
 
 <h3>Fazendo Commits</h3>
 
-<p>Remova o Projeto-2 e deixe apenas o Projeto-1, nesse projeto, vamos adicionar os arquivos com <code>git add .</code> (não esqueça do ponto, que significa <q>tudo</q>), caso não seja adicionado e vamos colocar um ponto no tempo desse projeto, que vamos chamar de <q>commitar</q>.</p>
+<p>Remova o Projeto-2 e deixe apenas o Projeto-1, nesse projeto, vamos adicionar os arquivos com <code>git add .</code> (não esqueça do ponto, que significa <q>tudo</q>), caso não esteja adicionado, e vamos colocar um ponto no tempo desse projeto, que vamos chamar de <q>commitar</q>.</p>
 
 <p>Para fazer o commit, digite <code>git commit -m "Motivo do Commit"</code>. Veja o status de novo com <code>git status</code> para ver se o commit foi executado com êxito.</p>
 
-<p>Para ver o histórico de commits, basta digitar no terminal <code>git log</code>. Ele mostrará o autor do commit, a data do mesmo e seu hash. Para sair da tela basta digitar <q>q</q>. Para ver resumido, digite <code>git log --oneline</code>.</p>
+<p>Para ver o histórico de commits, basta digitar no terminal <code>git log</code>. Ele mostrará o autor do commit, a data do mesmo e seu hash. Para sair da tela, basta digitar <q>q</q>. Para ver resumido, digite <code>git log --oneline</code>.</p>
 
 <p>Coloque um conteúdo básico no HTML e no CSS, para eles serem alterados. Novamente, digite esses comandos na ordem:</p>
 
@@ -172,7 +172,7 @@ git log
 
 <p>Podemos salvar mudanças no stash sem commitar, com o comando <code>git stash</code>, e pra recuperar os dados salvos, use <code>git stash pop</code>.</p>
 
-<h3>Desfazendo Commit</h3>
+<h3>Desfazendo Commits</h3>
 
 <p>Como sabemos, cada commit é um ponto no histórico do seu repositório. Há necessidade de voltar a um commit anterior ao último. Existem três formas de desfazer um commit:</p>
 

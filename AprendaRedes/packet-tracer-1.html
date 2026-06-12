@@ -254,7 +254,7 @@ exit
 
 <p>No laptop, em Desktop, vamos em IP Configuration e colocar o IP <code>192.168.0.10</code>.</p>
 
-<p>Abra o switch e em CLI, digite a senha e esses comandos:</p>
+<p>Abra o switch, e em CLI, digite a senha e esses comandos:</p>
 
 <pre>
 <code>
@@ -312,7 +312,7 @@ exit
 
 <p>Volte ao prompt do laptop e tente conectar. Ele conectará normalmente agora.</p>
 
-<p>Digite o comando <code>show running-config</code>, veremos que a senha não está criptografada. Para criptografar, digite esses comandos:</p>
+<p>Digite o comando <code>enable</code> e <code>show running-config</code>, veremos que a senha não está criptografada. Para criptografar, digite esses comandos:</p>
 
 <pre>
 <code>
@@ -366,9 +366,9 @@ exit
 
 <p>Ligue com um cabo Through os computadores ao switch (os dois primeiros nas portas 1 e 2 e os outros dois nas portas 11 e 12). Coloque o painel de simulação e mande uma mensagem do PC 1 ao Laptop 1.</p>
 
-<p>Para criar a VLAN (cuja configuração não tem nos computadores, geralmente), a gente configura no switch.</p>
+<p>Para criar a VLAN, cuja configuração não tem nos computadores geralmente, a gente configura no switch.</p>
 
-<p>Entre no switch e em CLI, digite esses comandos:</p>
+<p>Entre no switch, e em CLI, digite esses comandos:</p>
 
 <pre>
 <code>
@@ -412,7 +412,7 @@ exit
 </code>
 </pre>
 
-<p>Assim, criaremos as VLAN 10 (marketing) e VLAN 11 (financeiro)</p>
+<p>Assim, criaremos as VLAN 10 (marketing) e VLAN 11 (financeiro).</p>
 
 <p>A primeira VLAN vai da porta 1 a 10, e a segunda da porta 11 ao 20.</p>
 

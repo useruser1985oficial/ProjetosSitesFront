@@ -26,6 +26,198 @@
 
 <h2>Programção Orientada a Objetos em Python - Parte 3</h2>
 
+<h3>Encapsulamento: Getters, Setters e Property</h3>
+
+<p>Como explicado, o encapsulamento visa manter a integridade do sistema, protegendo o estado interno do objeto contra interferência externa não regulamentada. No caso do Python nós apenas sinalizamos quais atributos devem ser considerados protegidos ou privados. Para podermos manipular os atributos <q>protegidos</q> e <q>privados</q> precisaremos criar métodos públicos conhecidos como getters e setters, que controlarão o acesso de forma mais segura.</p>
+
+<p>Voltando ao exemplo da conta bancária, nós não teremos acesso direto ao cofre pra colocar e pegar dinheiro, para isso teremos um funcionário do banco para poder fazer isso de forma controlada, esse é o conceito de métodos acessores.</p>
+
+<p>No Python existem duas maneiras de permitir o acesso aos dados encapsulados: O uso de getters e setters, e o uso do decorador <code>@property</code>.</p>
+
+<p>O exemplo de getters e setters poderia ser, por exemplo, na nota de um aluno, cuja nota seria protegida, para apenas pegar o valor da nota, usamos um getter, da mesma forma, para mudar, usamos um setter.</p>
+
+<p>Vamos supor esse código:</p>
+
+<pre>
+<code>
+from rich import print, inspect
+
+class Avaliacao:
+    def __init__(self, nome, disciplina, nota = 0):
+        self.nome = nome
+        self.disciplina = disciplina
+        self.nota = nota # Por enquanto deixe público
+</code>
+</pre>
+
+<p>Código principal:</p>
+
+<pre>
+<code>
+def main():
+    av1 = Avaliacao("Sérgio", "Matemática", 9.5)
+    inspect(av1)
+
+if __name__ == "__main__":
+    main()
+</code>
+</pre>
+
+<p>Só que isso poderá dar erros, como por exemplo:</p>
+
+<pre>
+<code>
+av1 = Avaliacao("Sérgio", "Matemática", 9.5)
+
+av1.nota = -234 # Não deveria permitir
+
+inspect(av1)
+</code>
+</pre>
+
+<p>Aí, na classe, colocamos o atributo nota como protegido, assim:</p>
+
+<pre>
+<code>
+self._nota = nota
+</code>
+</pre>
+
+<p>E exiba assim:</p>
+
+<pre>
+<code>
+av1 = Avaliacao("Sérgio", "Matemática", 9.5)
+
+av1.nota = -234
+
+inspect(av1, private = True)
+</code>
+</pre>
+
+<p>Nesse caso acima, ele protegeu o atributo nota da classe, e deixou a nota exposta no código principal isolada.</p>
+
+<p>Para criar os métodos getter (que pega) e setter (que muda), alteramos a classe assim:</p>
+
+<pre>
+<code>
+class Avaliacao:
+    def __init__(self, nome, disciplina, nota = 0):
+        self.nome = nome
+        self.disciplina = disciplina
+        self._nota = nota
+    
+    # Métodos acessores
+    def getNota(self): # Método público getter, pega a nota
+        return self._nota
+    
+    def setNota(self, nota): # Método público setter, muda a nota
+        self._nota = nota
+</code>
+</pre>
+
+<p>PS: Esses nomes são os mais usados, mas eles podem ter qualquer nome.</p>
+
+<p>Só que tem um porém, através dos métodos setters poderemos mudar o atributo privado diretamente:</p>
+
+<pre>
+<code>
+av1 = Avaliacao("Sérgio", "Matemática", 9.5)
+
+av1.setNota(-234)
+
+inspect(av1, private = True)
+</code>
+</pre>
+
+<p>Então, nesse caso, podemos personalizar o setter, dessa forma:</p>
+
+<pre>
+<code>
+def setNota(self, nota): # Método público setter, muda a nota
+    if nota >= 0 and nota <= 10:
+        self._nota = nota
+    else:
+        print("Nota Inválida!")
+</code>
+</pre>
+
+<p>Se ele passar um valor fora do intervalo, ele não alterará:</p>
+
+<pre>
+<code>
+av1 = Avaliacao("Sérgio", "Matemática", 9.5)
+
+av1.setNota(10) # Passe valores válidos e inválidos
+
+inspect(av1, private = True)
+</code>
+</pre>
+
+<p>Para usar o getter, basta usar ele num print ou atribuir o valor de retorno a outra variável:</p>
+
+<pre>
+<code>
+av1 = Avaliacao("Sérgio", "Matemática", 9.5)
+
+av1.setNota(10)
+print(av1.getNota())
+
+print(f"{av1.nome} tirou {av1.getNota()} em {av1.disciplina}.")
+
+inspect(av1, private = True)
+</code>
+</pre>
+
+<p>Podemos usar o decorador <code>@property</code> em Python e outras linguagens modernas para acessar atributos protegidos e privados. Nesse caso usamos atributos especiais com esse indicador para validar o atributo. Vamos alterar o código da classe assim:</p>
+
+<pre>
+<code>
+class Avaliacao:
+    def __init__(self, nome, disciplina, nota = 0):
+        self.nome = nome
+        self.disciplina = disciplina
+        self._nota = nota
+
+    # Criando Atributos Validáveis:
+    @property
+    def nota(self): # Esse método funcionará como um atributo que pega o valor
+        return self._nota
+
+    @nota.setter # Nome do property, mesmo nome do atributo sem underline
+    def nota(self, no): # Esse método funcionará como um atributo que muda o valor
+        if no >= 0 and no <= 10:
+            self._nota = no
+        else:
+            print("Nota Inválida!")
+</code>
+</pre>
+
+<p>E no código principal:</p>
+
+<pre>
+<code>
+av1 = Avaliacao("Sérgio", "Matemática")
+
+av1.nota = 3.5 # Como um setter, tente passar valores válidos e inválidos
+print(av1.nota) # Como um getter
+
+print(f"{av1.nome} tirou {av1.nota} em {av1.disciplina}.") # Como um getter
+
+inspect(av1, private = True)
+</code>
+</pre>
+
+<p>PS: Além de setter, podemos ver o decorador getter, como por exemplo, no caso acima, seria <code>@nota.getter</code>, e temos também o deleter, como o <code>@nota.deleter</code>, dessa forma:</p>
+
+<pre>
+<code>
+@nota.deleter
+def nota(self):
+    pass
+</code>
+</pre>
+
 <ul>
     <li><a href="poo-em-python-2.html">Parte Anterior da Matéria!</a></li>
     <!--<li><a href="poo-em-python-4.html">Continuação da Matéria!</a></li>-->

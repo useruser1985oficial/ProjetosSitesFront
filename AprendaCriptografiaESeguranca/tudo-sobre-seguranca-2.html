@@ -223,7 +223,7 @@ ssh-add
 
 <p>O comando SCP (Secure Copy) é um programa utilizado para copiar arquivos de forma segura entre dois hosts numa rede, usando o SSH para transferência segura dos dados.</p>
 
-<p>Entre no servidor e pegue o ip dele, usando o ifconfig para isso. e o nome do usuário do mesmo.</p>
+<p>Entre no servidor e pegue o IP dele, usando o ip addr para isso, e o nome do usuário do mesmo.</p>
 
 <p>Na máquina cliente, dê um ping no IP do servidor, e veja se ele está respondendo.</p>
 
@@ -253,12 +253,12 @@ cat servidor.txt
 
 mkdir TesteSCP
 
-mv arquivo.txt /TesteSCP/
-mv servidor.txt /TesteSCP/
+mv arquivo.txt TesteSCP
+mv servidor.txt TesteSCP
 </code>
 </pre>
 
-<p>No código acima, o padrão é a pasta /home/nomedoservidor, se for baixar de outro diretório, especifique ele após os dois pontos, o segunto nome é o nome que ele terá no cliente após o download.</p>
+<p>No código acima, o padrão é a pasta /home/nomedoservidor, se for baixar de outro diretório, especifique ele após os dois pontos, o segundo nome é o nome que ele terá no cliente após o download.</p>
 
 <p>Para copiar do cliente para o servidor da pasta criada, fazemos assim:</p>
 
@@ -268,7 +268,9 @@ scp -r TesteSCP nomedoservidor@192.168.1.189:~/Imagens
 </code>
 </pre>
 
-<p>No servidor, podemos ver, na pasta especificada, que o diretório todo foi transferido, com todos os arquivos juntos.</p>
+<p>PS: O <code>-r</code> indica que uma pasta deve ser copiada.</p>
+
+<p>No servidor, podemos ver, na pasta especificada, que o diretório todo foi transferido, com todos os arquivos junto.</p>
 
 <p>Outras opções do scp:</p>
 
@@ -282,11 +284,11 @@ scp -r TesteSCP nomedoservidor@192.168.1.189:~/Imagens
 
 <p>O projeto Tor é uma organização que conduz pesquisa e desenvolvimento em privacidade e anonimidade online. A ideia central do Tor é impedir que outras pessoas descubram sua localização, seus hábitos de navegação, mascarar sua identidade, etc.</p>
 
-<p>Para baixar o navegador tor, acesse esse site e escolha a opção referente ao seu sistema (no caso, o Linux): <a href="https://www.torproject.org/pt-BR/download/languages/" target="_blank">https://www.torproject.org/pt-BR/download/languages/</a></p>
+<p>Para baixar o navegador Tor, acesse esse site e escolha a opção referente ao seu sistema (no caso, o Linux): <a href="https://www.torproject.org/pt-BR/download/languages/" target="_blank">https://www.torproject.org/pt-BR/download/languages/</a></p>
 
-<p>Na página de download, existem algumas dicas e sugestões para usar o TOR corretamente e com segurança. Aqui vemos como verificar a assinatura dele: <a href="https://www.torproject.org/docs/verifying-signatures" target="_blank">https://www.torproject.org/docs/verifying-signatures</a></p>
+<p>Na página de download, existem algumas dicas e sugestões para usar o Tor corretamente e com segurança. Aqui vemos como verificar a assinatura dele: <a href="https://www.torproject.org/docs/verifying-signatures" target="_blank">https://www.torproject.org/docs/verifying-signatures</a></p>
 
-<p>Baixe também o arquivo de chave do TOR, na mesma página. Com os dois arquivos na mesma pasta, digite isso:</p>
+<p>Baixe também o arquivo de chave do Tor, na mesma página. Com os dois arquivos na mesma pasta, digite isso:</p>
 
 <pre>
 <code>
@@ -301,7 +303,7 @@ gpg --sign-key 5A4F5F4F5452677F32E55A17D0ACBC71C8C023AB
 </code>
 </pre>
 
-<p>Depois, para verificar se o pacote TOR realmente é o original, faça isso:</p>
+<p>Depois, para verificar se o pacote Tor realmente é o original, faça isso:</p>
 
 <pre>
 <code>
@@ -309,7 +311,7 @@ gpg --verify tor-browser-linux32-3.5.3_pt-BR.tar.xz{.asc,}
 </code>
 </pre>
 
-<p>Veja se aparece "assinatura correta de "The Tor Browser Developers", que mostrará que o pacote é verídico.</p>
+<p>Veja se aparece <q>Assinatura Correta de "The Tor Browser Developers"</q>, que mostrará que o pacote é verídico.</p>
 
 <p>Para instalar, rode esses comandos:</p>
 
@@ -319,7 +321,7 @@ tar -xpvf tor-browser-linux32-3.5.3_pt-BR.tar.xz
 </code>
 </pre>
 
-<p>Entre no diretório do programa, e ver se aparece o start-tor-browser, que é o que inicializa o navegador, posteriormente, ele pode ser adicionado à um atalho ou ao lançador.</p>
+<p>Entre no diretório do programa, e vê se aparece o start-tor-browser, que é o que inicializa o navegador, posteriormente, ele pode ser adicionado a um atalho ou ao lançador.</p>
 
 <p>Abrindo o Tor, aparecerá as configurações do navegador, que deverão ser feitas para permitir o acesso.</p>
 

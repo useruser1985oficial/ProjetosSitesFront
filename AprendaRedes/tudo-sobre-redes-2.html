@@ -251,13 +251,13 @@
 
 <p>O protocolo Spanning Tree Protocol (STP) é um protocolo baseado em um algoritmo que garante que não ocorrerá loop em uma rede local. Geralmente são usados em redes de grande porte.</p>
 
-<p>Em redes maiores é necessário estabelecer redundância para evitar que a rede continue funcionando mesmo quando um switch apresentar problema.</p>
+<p>Em redes maiores é necessário estabelecer redundância para que a rede continue funcionando mesmo quando um switch apresentar problema.</p>
 
 <p>A forma que o protocolo Spanning Tree trabalha para que isso não ocorra, utiliza quadros especiais chamados BPDU - Bridge Protocol Data Unit.</p>
 
-<p>BPDUs são trocados regularmente, normalmente a cada dois segundos e permitem que os switches fiquem sabendo de alterações na rede bem como para ou iniciar encaminhamento nas portas conforme necessário.</p>
+<p>BPDUs são trocados regularmente, normalmente a cada dois segundos e permitem que os switches fiquem sabendo de alterações na rede bem como parar ou iniciar encaminhamento nas portas conforme necessário.</p>
 
-<p>BPDUs além de descobrirem portas que podem causar loops também ajudam a definir qual será o switch principal (core) da rede e qual a melhor forma de chegar bloqueando linhas redundantes.</p>
+<p>BPDUs, além de descobrirem portas que podem causar loops, também ajudam a definir qual será o switch principal (core) da rede e qual a melhor forma de chegar bloqueando linhas redundantes.</p>
 
 <p>Vamos dar uma olhada em três tipos de porta:</p>
 
@@ -269,9 +269,9 @@
 
 <p>O root bridge é escolhido através do seu Bridge ID, número formado por um valor chamado "Bridge Priority" + o MAC Address.</p>
 
-<p>O primeiro número é 32768 por padrão, mas pode ser alterado desde que seja um múltiplo de 4096 (como 16384 ou 65536). Por exemplo <code>32768.0200.0000.1111</code>.</p>
+<p>O primeiro número é 32768 por padrão, mas pode ser alterado desde que seja um múltiplo de 4096 (como 16384 ou 65536). Por exemplo, <code>32768.0200.0000.1111</code>.</p>
 
-<p>Vamos supor que numa rede, tenhamos três switches, com esses números:</p>
+<p>Vamos supor que, numa rede, tenhamos três switches, com esses números:</p>
 
 <ul>
     <li><code>32768.0200.0000.1111</code></li>
@@ -279,7 +279,7 @@
     <li><code>32768.0200.0000.3333</code></li>
 </ul>
 
-<p>O Root Bridge é o que será o que tem o menor número. Quanto menor o número, maior a prioridade dele.</p>
+<p>O Root Bridge será o que tem o menor número. Quanto menor o número, maior a prioridade dele.</p>
 
 <p>A Root Port (RP) são as portas que os outros switches usam para chegar ao Root Bridge. No segundo switch, tem uma porta chamada Designated Port (DP), que é ligada ao terceiro switch pelo Blocking Port (BP), que bloqueia a porta, caso necessário, mas libera a conexão se precisar, caso seja um caminho mais curto.</p>
 
@@ -289,7 +289,7 @@
     <tr>
         <th>Data Rate</th>
         <th>STP Cost<br/>(802.1D-1998)</th>
-        <th>RSTP Cost<br/>(802.1D-2004 / 802.1w)</th>
+        <th>RSTP Cost<br/>(802.1D-2004 / 802.1W)</th>
     </tr>
     <tr>
         <td>4 Mbit/s</td>
@@ -332,24 +332,24 @@
 
 <h3>Protocolo Spanning Tree - Parte 2</h3>
 
-<p>Vamos ver hoje sobre os estaddos que uma porta de um switch com STP habilitado podem assumir:</p>
+<p>Vamos ver hoje sobre os estados que uma porta de um switch com STP habilitado podem assumir:</p>
 
 <ul>
-    <li><b>Blocking: </b>Uma porta que causaria um loop caso estivesse ativa. Ela não recebe e nem envia dados de usuário neste estado, mas continua recebendo BPDUs e pode transformar em uma porta que faz encaminhamentos caso a situação da rede se altere e seja necessário.</li>
+    <li><b>Blocking: </b>Uma porta que causaria um loop caso estivesse ativa. Ela não recebe e nem envia dados de usuário neste estado, mas continua recebendo BPDUs e pode transformar-se em uma porta que faz encaminhamentos caso a situação da rede se altere e seja necessário.</li>
     <li><b>Listening: </b>O switch verifica os BPDUs e verifica se ele não deve ficar bloqueado, neste caso ele não ajuda a construir a tabela MAC nem encaminha quadros.</li>
     <li><b>Learning: </b>Neste estado a porta ainda não encaminha os quadros, mas "aprende" endereços MAC dos quadros que passam por ela e ajuda a construir a tabela MAC.</li>
-    <li><b>Forwarding: </b>Uma porta funcionando normalmente, ou seja, recebendo e encaminhando quadros, mesmo assim, continua monitorando BPDUs para saber se em algum momento não deve entrar em estado bloqueado.</li>
+    <li><b>Forwarding: </b>Uma porta funcionando normalmente, ou seja, recebendo e encaminhando quadros, mesmo assim, continua monitorando BPDUs para saber se em algum momento deve entrar em estado bloqueado.</li>
     <li><b>Disabled: </b>Uma porta desabilitada, que pode ser feito pelo administrador da rede manualmente.</li>
 </ul>
 
-<p>Vamos supor que na sua rede tenha um dispositivo novo conectado, uma porta bloqueada passaria um certo tempo pra estar ativa novamente. Para isso foi criado o RSTP. Ele tem umas diferenças que faz que esse processo de alteração das portas seja mais rápido, veja a tabela abaixo como exemplo:</p>
+<p>Vamos supor que na sua rede tenha um dispositivo novo conectado, uma porta bloqueada passaria um certo tempo pra estar ativa novamente. Para isso foi criado o RSTP. Ele tem umas diferenças que faz com que esse processo de alteração das portas seja mais rápido, veja a tabela abaixo como exemplo:</p>
 
 <table>
     <tr>
         <th>STP (802.1D)<br/>Estado da Porta</th>
         <th>RSTP (802.1W)<br/>Estado da Porta</th>
-        <th>A porta está inclusa<br/>na topologia ativa?</th>
-        <th>A porta está "aprendendo"<br/>endereços MAC?</th>
+        <th>A Porta está Inclusa<br/>na Topologia Ativa?</th>
+        <th>A Porta está "Aprendendo"<br/>Endereços MAC?</th>
     </tr>
     <tr>
         <td>Disable</td>
@@ -383,11 +383,11 @@
     </tr>
 </table>
 
-<p>Pra ficar um pouco mais fácil de entender, vamos ver o papel das portas da rede (Port Roles), que é uma função veriável que pode ser dada à uma determinada porta. A port root e a porta designada continua com os mesmos objetivos, já a porta bloqueada tem os objetivos de atuar como "backup" e "alternativa".</p>
+<p>Pra ficar um pouco mais fácil de entender, vamos ver o papel das portas da rede (Port Roles), que é uma função variável que pode ser dada a uma determinada porta. A porta root e a porta designada continua com os mesmos objetivos, já a porta bloqueada tem os objetivos de atuar como "backup" e "alternativa".</p>
 
 <ul>
-    <li><b>Alternate Port: </b>É uma porta alternativa para se chegar na Root Brigde.</li>
-    <li><b>Backup Port: </b>Uma porta no qual o switch não descartou as informações e pode ser rapidamente usada quando uma outra porta falhar.</li>
+    <li><b>Alternate Port: </b>É uma porta alternativa para se chegar na Root Bridge.</li>
+    <li><b>Backup Port: </b>Uma porta na qual o switch não descartou as informações e pode ser rapidamente usada quando uma outra porta falhar.</li>
 </ul>
 
 <h3>Protocolo Ethernet</h3>
@@ -466,6 +466,47 @@
     <li><b>Half-Duplex: </b>Permite o envio e recebimento de dados, mas não ao mesmo tempo.</li>
     <li><b>Full-Duplex: </b>Permite enviar e receber ao mesmo tempo (como as placas de rede).</li>
 </ul>
+
+<h3>Cabo Par Trançado - Parte 1</h3>
+
+<p>Apesar de muita coisa hoje em dia ser sem fio, ainda é necessário cabeamento em muitas partes da rede, pelo menos até chegar ao roteador, por isso é importante conhecer os tipos diferentes de cabo usados em redes internas.</p>
+
+<p>O cabo par-trançado é um dos tipos de cabo mais utilizados, possuí 4 pares de fios, e cada par possuí uma quantidade de tranças (torções) por metro, e cada par (trança) possuí sinais iguais porém opostos, isso faz com que os pares minimizem interferências entre eles e permitem que os sinais transmitidos e recebidos possam ser comparados.</p>
+
+<p>O cabo UTP (Unshielded Twisted Pair) é o mais utilizado, mas ele não tem nenhuma proteção extra.</p>
+
+<p>O cabo SCTP (Screened Twisted Pair) e o FTP (Foiled Twisted Pair) oferecem proteção para todos os pares usando folha para blindagem.</p>
+
+<p>O cabo S/STP (Screened Shielded Twisted Pair) e o S/FTP (Screened Foiled Twisted Pair) oferecem proteção para o cabo e mais uma proteção que separa cada par dentro do cabo.</p>
+
+<p>PS: O cabo FTP não tem nada a ver com protocolo FTP. Da mesma forma, o cabo STP não tem nada a ver com o protocolo STP.</p>
+
+<p>Veja alguns desses cabos abaixo:</p>
+
+<img src="imagens/par-trancado.jpg" alt="Par Trançado"/>
+
+<p>Outras características presentes nos cabos são essas:</p>
+
+<ul>
+    <li><b>CMX: </b>Para instalações residenciais com pouco cabo (casas comuns).</li>
+    <li><b>CM: </b>Para instalações horizontais em lugares com alta ocupação, com fluxo de ar forçado (por exemplo, em prédios que possuem dutos para passar cabos de todos tipos, como ambientes comerciais).</li>
+    <li><b>CMR (Riser): </b>Para instalações verticais como em "shafts" (por exemplo, em prédios com mais de dois andares).</li>
+    <li><b>CMP (Plenum): </b>Aplicação horizontal em locais onde gases tóxicos se espalhando rapidamente poderiam causar danos às pessoas (em espaços livres em locais onde também passam dutos de ar, os cabos não passam dentro desses dutos).</li>
+</ul>
+
+<h3>Cabo Par Trançado - Parte 2</h3>
+
+<p>Para escolhermos bem os cabos, precisamos conhecer bem as categorias deles, que são essas:</p>
+
+<ul>
+    <li><b>Categoria 3: </b>Indicado para redes Ethernet 10 Mbps e Token Ring 4 Mbps (em desuso, substituído pela categoria 5).</li>
+    <li><b>Categoria 5: </b>Indicado para redes Ethernet 100 Mbps.</li>
+    <li><b>Categoria 5e: </b>Indicado para redes Ethernet 1 Gbps.</li>
+    <li><b>Categoria 6: </b>Indicado para redes Ethernet 10 Gbps (até 55 metros).</li>
+    <li><b>Categoria 6a: </b>Indicado para redes Ethernet 10 Gbps (até 100 metros).</li>
+</ul>
+
+<p>A metragem influencia na velocidade, é a distância máxima entre o switch até o computador (incluindo tomadas, filtros e etc.).</p>
 
 <ul>
     <li><a href="tudo-sobre-redes-1.html">Parte Anterior da Matéria!</a></li>
